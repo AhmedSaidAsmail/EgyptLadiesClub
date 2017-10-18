@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i');
 @import url('https://fonts.googleapis.com/css?family=Scheherazade:400,700&subset=arabic');
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,500i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Oswald:400,500,600,700');
+
 .row{}
 .container{
     width: 93%;
@@ -314,18 +316,61 @@ span.pull-right-container{
     margin-left: -2px;
 }
 .basicsorts-ref{
-    display: flex;
     overflow-x: scroll;
     padding-bottom: 10px;
     margin-top: 15px;
     margin-bottom: 15px;
+    white-space: nowrap;
+}
+.basicsorts-ref::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.basicsorts-ref::-webkit-scrollbar-track {
+    background: #e6e6e6;
+    border: 8px solid transparent;
+    background-clip: content-box;   /* THIS IS IMPORTANT */
+}
+
+/* Handle */
+.basicsorts-ref::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border: 5px solid transparent;
+    background-clip: content-box;
+    border-radius: 10px;
+    display: none;
+}
+.basicsorts-ref:hover::-webkit-scrollbar-thumb {
+    display: block;
+}
+.basicsorts-ref h1{
+    font-size: 22px;
+    font-family: 'Roboto',sans-serif;
+    color: #59595a;
+}
+.basicsorts-ref h1 a{
+    font-size: 14px;
+    margin-left: 20px;
+    color: #3e8bc5;
+}
+.basicsorts-ref a{
+    text-decoration: none;
+     color: #59595a;
 }
 .basicsorts-item{
-    width: 100%;
-    height: 270px;
-    overflow: hidden;
-    border-radius: 50%;
+    width: 17%;
+    margin-right: 1%;
+    height: 210px;    
+    display: inline-block;
     position: relative;
+}
+.basicsorts-item-img{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 50%;
 }
 .basicsorts-item img{
     position: absolute;
@@ -336,6 +381,7 @@ span.pull-right-container{
     margin: auto;
     min-width: 100%;
     height: 100%;
+
 }
 .basicsorts-item-label{
     position: absolute;
@@ -345,8 +391,9 @@ span.pull-right-container{
     width: 100%;
     text-align: center;
     padding-bottom: 20px;
-    padding-top: 20px;
-    font-family: 'Archivo Narrow',sans-serif;
-    font-weight: 600;
+    padding-top:7px;
+    font-family: 'Oswald',sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
     font-size: 18px;
 }
