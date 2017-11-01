@@ -19,7 +19,20 @@ body,html{
 
 }
 
+.img-container{
+    position: relative;
+    overflow: hidden;
+}
+.img-container img{
+    position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+    height: 100%;
 
+}
 .body-container{
     width: 100%;
     transition: ease all .5s;
@@ -274,6 +287,7 @@ span.pull-right-container{
 .second-nav-conatiner{
     padding-top: 130px;
     width: 100%;
+    background-color: #fafafa;
 }
 #myCarousel{
     max-width: 100%;
@@ -356,7 +370,7 @@ span.pull-right-container{
 }
 .basicsorts-ref a{
     text-decoration: none;
-     color: #59595a;
+    color: #59595a;
 }
 .basicsorts-item{
     width: 17%;
@@ -387,7 +401,7 @@ span.pull-right-container{
     position: absolute;
     z-index: 1000;
     bottom: 0px;
-    background: #FFF;
+    background: #fafafa;
     width: 100%;
     text-align: center;
     padding-bottom: 20px;
@@ -396,4 +410,242 @@ span.pull-right-container{
     text-transform: uppercase;
     font-weight: 700;
     font-size: 18px;
+}
+.products-container{
+    width: 100%;
+    padding-bottom: 20px;
+}
+.products-container h2{
+    font-size:22px;
+    margin: 15px 0px
+}
+.item-welcome{
+    background-color: #FFF;
+    border: 1px solid #e6e6e6;
+    box-shadow: 0px 3px 3px #e6e6e6;
+    padding: 10px 0px;
+}
+.item-welcome-img{
+    width: 100%;
+    height: 120px;
+}
+.item-welcome-details{
+    padding: 10px;
+    margin: 0px;
+}
+.item-welcome-details h3{
+    font-size: 16px;
+    margin: 0px 0px 15px 0px;
+}
+.item-welcome-details .fa{
+    font-size: 16px;
+    margin-right:-2px;
+}
+.item-welcome-details i.fa-star{
+    color: #fec300;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #ce9504;
+}
+.item-welcome-details i.fa-star.fa-empty{
+    color: #FFF;
+}
+.item-welcome-details span.fa-stack{
+    margin-left: -7px;
+    margin-top: -9px;
+    margin-bottom: -7px;
+    margin-right: -9px;
+}
+.item-welcome-details span.fa-stack .fa{
+}
+.item-welcome-details span.fa-stack i.fa-star{
+    color:transparent;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #ce9504;
+}
+.item-welcome-details i.fa-star-half{
+    color: #fec300;
+    margin-left: -3px;
+}
+.item-welcome-details i.fa-star-half-o{
+    color: #fec300;
+}
+.item-welcome-details  i.fa-star-o{
+    color: transparent;
+}
+.welcome-review-count{
+    display: inline;
+    margin-left: 15px;
+}
+.price-deleted{
+    display: block;
+    text-decoration: line-through;
+    color: #aeaeae;
+    font-size: 16px;
+}
+.price-active{
+    display: block;
+    color: #006fcc;
+    font-size: 18px;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 700;
+}
+.price-active label{
+    font-size: 13px;
+}
+h2.header-sp{
+    margin-top: 40px;
+}
+.welcome-banner{
+    margin-top: 30px;
+    height: 250px;
+}
+.welcome-sorts-container{
+    border-bottom: 1px solid #e6e6e6;
+    margin-bottom: 30px;
+    background-color: #FFF;
+    margin:30px 0px;
+    padding: 0px;
+    display: flex;
+}
+.welcome-sorts-container [class^=col-md],.welcome-sorts-container .row{
+    padding: 0px;
+    margin: 0px;
+}
+.welcome-sorts-container [class^=col-md]{
+    max-height: 460px;
+    overflow: hidden;
+}
+.welcome-sort-logo{
+    border-right: 2px solid #4b4b4b;
+    position: relative;
+}
+.welcome-sort-logo h3{
+    background-color: #4b4b4b;
+    margin: 0px;
+    color: #FFF;
+    padding: 15px 10px 15px 55px;
+    font-family: 'Archivo Narrow',sans-serif;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 500;
+
+}
+
+.sort-number-label-conatiner{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 65px 65px 0 0;
+    border-color: #3b3b3b transparent transparent transparent;
+
+}
+.sort-number-label{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 62px 62px 0 0;
+    border-color: #4b4b4b transparent transparent transparent;
+
+}
+.sort-number{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    color: #898989;
+    font-size: 40px;
+    padding-left: 5px;
+    margin-top: -5px;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 700;
+}
+.welcome-sort-logo ul{
+    list-style: none;
+}
+.welcome-sort-logo ul img{
+    max-width: 100%;
+    height: 75px;
+}
+.welcome-sort-logo h3 i{
+    font-size: 25px;
+}
+.welcome-sorts-ref{
+    padding: 0px;
+    margin: 0px;
+}
+.welcome-sorts-ref h3{
+    background-color: #fafaf8;
+    margin: 0px;
+    padding: 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    font-family: 'Archivo Narrow',sans-serif;
+    border-bottom: 1px solid #e6e6e6;
+}
+.welcome-sorts-ref >ul{
+    padding: 15px 0px 0px 10px;
+    list-style: none;
+
+
+}
+.welcome-sorts-ref >ul >li >a{
+    text-transform: uppercase;
+    font-family: 'Archivo Narrow',sans-serif;
+    color: #464646;
+    text-decoration: none;
+    font-size: 13px;
+}
+.welcome-sorts-ref >ul >li >ul{
+    padding: 0px 0px 0px 10px;
+    list-style: none;
+}
+.welcome-sorts-ref >ul >li >ul a{
+    color: #464646;
+    text-decoration: none;
+    font-size: 12px;
+}
+.welcome-sort-img{
+    height: 460px;
+    width: 100%;
+}
+.welcome-sort-img img{
+
+}
+.welcome-sorts-items-list .row:first-child{
+    border-bottom: 1px solid #e6e6e6;
+    height: 260px;
+}
+.welcome-sorts-items-list .row:last-child{
+    height: 200px;
+}
+.welcome-sorts-items-list .row .welcome-sorts-items:first-child{
+    border-right: 1px solid #e6e6e6;
+}
+.welcome-sorts-items{
+    height: 100%;
+    text-align: center;
+}
+.welcome-sorts-items h3{
+    font-size: 15px;
+    margin: 10px 0px 0px 0px;
+    text-transform: uppercase;
+}
+.welcome-sorts-items span{
+    display: block;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 500;
+    color: #666666;
+}
+.welcome-sorts-items-list .row:first-child .welcome-sorts-item-img{
+    height: 200px;
+    width: 100%;
+}
+.welcome-sorts-items-list .row:last-child .welcome-sorts-item-img{
+    height: 140px;
+    width: 100%;
 }
