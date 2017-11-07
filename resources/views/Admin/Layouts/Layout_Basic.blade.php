@@ -59,7 +59,8 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
-                        <li class="treeview"> <a href="{{route('welcome')}}"> <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                        <li class="treeview"> <a href="{{route('admin.welcome')}}"> <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                        <li class="treeview{{(isset($activeFilter))?' active':''}}"> <a href="{{route('filter.index')}}"> <i class="fa fa-filter" aria-hidden="true"></i> <span>Filters</span></a></li>
                         <li class="treeview"> <a href="#"> <i class="fa fa-cog"></i> <span>Setting</span></a>
                             <ul class="treeview-menu">
                                 <li><a href="{{route('admin.change.profile')}}"><i class="fa fa-circle-o"></i> Admin Profile</a></li>

@@ -1,0 +1,25 @@
+.content-header{
+    margin-bottom: 20px;
+}
+ul.right-links{
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+ul.right-links>li> a.btn{
+    color: #FFF;
+    padding:7px 15px 7px 15px;
+    margin: 0px;
+}
+ul.right-links>li{
+    margin: 0px;
+    padding: 0px 5px 0px 0px;
+}
+.form-control{
+    height: 40px;
+}
+.with-border-sp{
+    border-top: 1px solid #e6e6e6;
+    margin-top: 10px;
+    padding-top: 20px;
+}
