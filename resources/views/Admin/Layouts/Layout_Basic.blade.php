@@ -60,7 +60,19 @@
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
                         <li class="treeview"> <a href="{{route('admin.welcome')}}"> <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-                        <li class="treeview{{(isset($activeFilter))?' active':''}}"> <a href="{{route('filter.index')}}"> <i class="fa fa-filter" aria-hidden="true"></i> <span>Filters</span></a></li>
+                        <li class="treeview{{(isset($activeFilter))?' active':''}}"> 
+                            <a href="{{route('filter.index')}}"> <i class="fa fa-filter" aria-hidden="true"></i> <span>Filters</span></a>
+                        </li>
+                        <li class="treeview{{(isset($activeSections))?' active':''}}"> 
+                            <a href="{{route('sections.index')}}"> <i class="fa fa-globe"></i> <span>Sections</span> 
+                                <span class="pull-right-container">
+                                    <span class="label label-primary pull-right">{{App\Models\Section::count()}}</span> </span> </a>
+                        </li>
+                        <li class="treeview{{(isset($activeCategory))?' active':''}}"> 
+                            <a href="{{route('categories.index')}}"> <i class="fa fa-globe"></i> <span>Categories</span> 
+                                <span class="pull-right-container">
+                                    <span class="label label-primary pull-right">{{App\Models\Categorie::count()}}</span> </span> </a>
+                        </li>
                         <li class="treeview"> <a href="#"> <i class="fa fa-cog"></i> <span>Setting</span></a>
                             <ul class="treeview-menu">
                                 <li><a href="{{route('admin.change.profile')}}"><i class="fa fa-circle-o"></i> Admin Profile</a></li>
