@@ -63,6 +63,9 @@
                         <li class="treeview{{(isset($activeFilter))?' active':''}}"> 
                             <a href="{{route('filter.index')}}"> <i class="fa fa-filter" aria-hidden="true"></i> <span>Filters</span></a>
                         </li>
+                        <li class="treeview{{(isset($activeBrands))?' active':''}}"> 
+                            <a href="{{route('brands.index')}}"> <i class="fa fa-sellsy" aria-hidden="true"></i> <span>Brands</span></a>
+                        </li>
                         <li class="treeview{{(isset($activeSections))?' active':''}}"> 
                             <a href="{{route('sections.index')}}"> <i class="fa fa-globe"></i> <span>Sections</span> 
                                 <span class="pull-right-container">

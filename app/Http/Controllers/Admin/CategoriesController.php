@@ -46,11 +46,13 @@ class CategoriesController extends Controller {
         $data = $request->all();
         $category = Categorie::findOrFail($id);
         $exImg = $category->img;
+        $data['parent_id'] = isset($data['parent_id']) ? $data['parent_id'] : 0;
         if ($request->hasFile('img')) {
             $file = Input::file('img');
             $data['img'] = UploadFacades::Upload($file, $this->_path, 250);
         }
         try {
+            $this->updateSection($request->section_id, $category->section_id, $id);
             $category->update($data);
             $category->filters()->sync($data['filters']);
             (isset($exImg) && $request->hasFile('img')) ? UploadFacades::removeExImg($exImg, $this->_path) : '';
@@ -126,6 +128,37 @@ class CategoriesController extends Controller {
         $parent_category = Categorie::find($parent_id);
         $section = $parent_category->section_id;
         $data["section_id"] = $section;
+    }
+
+    private function updateSection($requestSection, $currentSection, $id) {
+        if ($this->checkSection($requestSection, $currentSection, $id)) {
+            $this->updateChilds($requestSection, $id);
+        }
+    }
+
+    private function hasChilds($id) {
+        $childs = Categorie::where('parent_id', $id)->count();
+        if ($childs > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private function checkSection($requestSection, $currentSection, $id) {
+        if ($requestSection !== $currentSection && $this->hasChilds($id)) {
+            return true;
+        }
+        return FALSE;
+    }
+
+    private function updateChilds($requestSection, $id) {
+        $childs = Categorie::where('parent_id', $id)->get();
+        foreach ($childs as $child) {
+            $child->update(['section_id' => $requestSection]);
+            if ($this->hasChilds($child->id)) {
+                $this->updateChilds($requestSection, $child->id);
+            }
+        }
     }
 
 }

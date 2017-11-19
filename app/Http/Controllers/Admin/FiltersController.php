@@ -40,11 +40,11 @@ class FiltersController extends Controller {
 
     public function destroySelected(Request $request) {
         $rows = $request->filter_id;
-        if(count($rows)<=0){
-            return redirect()->back()->with('errorMsg','No Filters selected');
+        if (count($rows) <= 0) {
+            return redirect()->back()->with('errorMsg', 'No Filters selected');
         }
         foreach ($rows as $row) {
-             $this->destroy($row);
+            $this->destroy($row);
         }
         return redirect()->route('filter.index')->with('success', ' Filters has been deleted');
     }

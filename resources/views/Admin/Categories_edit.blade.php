@@ -49,9 +49,18 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-6">
+                                    <?php
+                                    if ($category->parent_id !== 0) {
+                                        $diabled = 'disabled="diabled"';
+                                        $disabledParent=null;
+                                    }else{
+                                       $diabled = null; 
+                                       $disabledParent= 'disabled="diabled"';
+                                    }
+                                    ?>
                                     <div class="form-group">
                                         <label>Section Name:</label>
-                                        <select class="form-control" name="section_id" required>
+                                        <select class="form-control" name="section_id" {{ $diabled }} >
                                             <option value="">Select Section</option>
                                             @foreach (App\Models\Section::all() as $section)
                                             <option value="{{$section->id}}" {!!$section->id==$category->section_id?'selected="selected"':'null'!!}>{{$section->en_name}}</option>
@@ -63,8 +72,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Parent:</label>
-                                        <select class="form-control" name="parent_id" required>
-                                            <option value="0">--- None ---</option>
+                                        <select class="form-control" name="parent_id" {{$disabledParent}}>
+                                            <option value="">--- None ---</option>
                                             @foreach (\App\Models\Categorie::all() as $categoryResult)
                                             <option value="{{$categoryResult->id}}" {!!$categoryResult->id==$category->parent_id?'selected="selected"':'null'!!}>{{App\Http\Controllers\Admin\CategoriesController::analyzeCatgoryName($categoryResult->id)}}</option>
                                             @endforeach
@@ -199,5 +208,25 @@
 $(function () {
     $(".select2").select2();
 });
+</script>
+<script>
+    $('select[name="section_id"]').change(function () {
+        var inputvalue = $(this).val();
+        var parentinput = $(this).closest('form').find('select[name="parent_id"]');
+        if (inputvalue) {
+            parentinput.prop('disabled', true);
+        } else {
+            parentinput.prop('disabled', false);
+        }
+    });
+    $('select[name="parent_id"]').change(function () {
+        var inputvalue = $(this).val();
+        var sectioninput = $(this).closest('form').find('select[name="section_id"]');
+        if (inputvalue) {
+            sectioninput.prop('disabled', true);
+        } else {
+            sectioninput.prop('disabled', false);
+        }
+    });
 </script>
 @endsection
