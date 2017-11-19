@@ -60,6 +60,9 @@
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
                         <li class="treeview"> <a href="{{route('admin.welcome')}}"> <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                        <li class="treeview{{(isset($activeSuppliers))?' active':''}}"> 
+                            <a href="{{route('suppliers.index')}}"> <i class="fa fa-users" aria-hidden="true"></i> <span>Suppliers</span></a>
+                        </li>
                         <li class="treeview{{(isset($activeFilter))?' active':''}}"> 
                             <a href="{{route('filter.index')}}"> <i class="fa fa-filter" aria-hidden="true"></i> <span>Filters</span></a>
                         </li>

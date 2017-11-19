@@ -11,6 +11,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:web'], function() {
     Route::delete('filter/destroy', ['uses' => 'Admin\FiltersController@destroySelected'])->name('filter.destroy.selected');
     Route::resource('/sections', 'Admin\SectionsController');
     Route::resource('categories', 'Admin\CategoriesController', ['except' => ['create', 'show', 'destroy']]);
-    Route::resource('brands', 'Admin\BrandsController', ['except' => ['destroy','show','update','edit']]);
+    Route::resource('brands', 'Admin\BrandsController', ['except' => ['destroy', 'show', 'update', 'edit']]);
     Route::delete('brands/destroy', ['uses' => 'Admin\BrandsController@destroySelected'])->name('brand.destroy.selected');
+    Route::resource('/suppliers', 'Admin\SuppliersController', ['except' => ['destroy', 'create', 'store', 'edit']]);
 });
