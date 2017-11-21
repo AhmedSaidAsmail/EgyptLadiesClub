@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Customer extends Model {
+class Customer extends User {
 
     protected $fillable = [
         'email',

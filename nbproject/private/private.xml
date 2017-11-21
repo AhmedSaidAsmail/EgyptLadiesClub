@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/Admin/Layouts/Layout_Basic.blade.php</file>
-            <file>file:/D:/Work/Websites/EgyptLadiesClub/public-design/css/style.css</file>
-            <file>file:/D:/Work/Websites/EgyptLadiesClub/public/css/register.css</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/app/User.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Customer.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Supplier.php</file>
             <file>file:/D:/Work/Websites/EgyptLadiesClub/routes/web.php</file>
-            <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/auth_supplier/registerForm.blade_1.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/Supplier/Layouts/Layout_Basic.blade.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Http/Controllers/Auth_Supplier/LoginController.php</file>
             <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Http/Controllers/Auth_Supplier/RegisterController.php</file>
-            <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/auth_supplier/registerForm.blade.php</file>
         </group>
     </open-files>
 </project-private>

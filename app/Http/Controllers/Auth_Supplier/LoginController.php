@@ -40,9 +40,11 @@ class LoginController extends Controller {
             'password' => 'required'
         ]);
         if (Auth::guard('supplier')->attempt(['email' => $request->email, 'password' => $request->password, 'confirm' => 1], $request->remember)) {
-            return redirect()->intended(route('spplier.welcome'));
+            return redirect()->route('spplier.welcome');
         }
-        return redirect()->back()->withInput($request->only('email', 'remember'));
+        return redirect()->back()
+                        ->withInput($request->only('email', 'remember'))
+                        ->withErrors(['email' => 'Please check that you have entered your login and password correctly.']);
     }
 
     public function logout() {
