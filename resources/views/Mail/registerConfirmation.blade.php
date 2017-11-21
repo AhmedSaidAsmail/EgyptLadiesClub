@@ -1,0 +1,1 @@
+<a href="{{route('supplier.email.confirmation',[$id,$rand_code])}}">Confirm Mail</a>

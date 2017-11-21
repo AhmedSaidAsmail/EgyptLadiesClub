@@ -2,26 +2,21 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+class Supplier  extends User {
 
-class Supplier extends Model
-{
-        protected $fillable = [
+    protected $fillable = [
         'email',
         'password',
         'confirm',
-        'title',
         'f_name',
         'l_name',
+        'mobile',
         'company',
+        'store_name',
         'address',
         'city',
-        'state',
-        'country',
-        'phone',
-        'fax',
-        'website',
-        'company_type',
-        'service_offer'
+        'postal_code',
+        'rand_code',
     ];
+
 }

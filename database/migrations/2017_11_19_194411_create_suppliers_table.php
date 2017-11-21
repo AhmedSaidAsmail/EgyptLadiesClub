@@ -16,22 +16,18 @@ class CreateSuppliersTable extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->boolean('confirm')->nullable()->default(0);
             // addtional information
-            $table->string('title')->nullable();
             $table->string('f_name');
             $table->string('l_name');
+            $table->string('mobile');
             $table->string('company');
+            $table->string('store_name');
             $table->string('address');
             $table->string('city');
-            $table->string('state');
-            $table->string('country');
-            $table->string('phone');
-            $table->string('fax');
-            $table->string('website');
-            $table->string('company_type');
-            $table->string('service_offer');
+            $table->string('postal_code')->nullable();
+            $table->text('rand_code');
             $table->rememberToken();
             $table->timestamps();
         });

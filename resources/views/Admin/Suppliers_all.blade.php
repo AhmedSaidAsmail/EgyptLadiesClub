@@ -36,7 +36,7 @@
                                     <th>City</th>
                                     <th>Country</th>
                                     <th>Status</th>
-                                    <th>Tours</th>
+                                    <th>Products</th>
                                     <th>#Action</th>
                                 </tr>
                             </thead>
@@ -83,7 +83,7 @@
                                     <th>City</th>
                                     <th>Country</th>
                                     <th>Status</th>
-                                    <th>Tours</th>
+                                    <th>Products</th>
                                     <th>#Action</th>
                                 </tr>
                             </tfoot>
