@@ -65,8 +65,51 @@
 
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table-bordered-sp">
+                                        <thead>
+                                        <th>Filter Name*</th>
+                                        <th>Sort Order</th>
+                                        <th></th>
+                                        </thead>
+                                        <tbody>
+                                           
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                                <td><a class="btn btn-info btn-sm" id="add-row"><i class="fa fa-plus"></i></a></td>
+                                            </tr>  
+                                        </tfoot>                                        
+                                    </table>
+                                </div>
+
+                            </div>
                         </div>   
                     </form>
+                    <table id="table_containt" style="display:none;">
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img src="{{asset('images/admin/egypt-flag.png')}}"></span>
+                                        <input type="text" name="filter_ar_name[]" class="form-control" placeholder="Filter Group Name" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img src="{{asset('images/admin/flag-eng.png')}}"></span>
+                                        <input type="text" name="filter_en_name[]" class="form-control" placeholder="Filter Group Name" required>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" min="0" name="filter_sort_order[]" value="0" class="form-control">
+                                </td>
+                                <td><a class="btn btn-danger btn-sm" id="remove-row"><i class="fa fa-minus"></i></a></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
                     <!-- /.box-body -->
                 </div>
             </div>
@@ -75,15 +118,41 @@
 </div>
 @endsection
 @section ('Extra_Css')
-
 <link rel="stylesheet" type="text/css" href="{{asset('css/admin/style.css')}}">
+<style>
+    .table-bordered-sp{
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #E6E6E6;
+    }
+    .table-bordered-sp th,.table-bordered-sp td{
+        border: 1px solid #E6E6E6;
+        padding: 5px 10px;
+    }
+</style>
 @endsection
 @section('Extra_Js')
-<!--<script>
-    $('a.form-submit').click(function (event) {
-        event.preventDefault();
-        var form_id = $(this).attr('data-form');
-        $("form#" + form_id).trigger('submit');
+<script>
+    $(function () {
+        $('a#add-row').click(function (event) {
+            event.preventDefault();
+            var tbody = $(this).closest('table').find('tbody');
+            var insert = $('#table_containt').find('tr').html();
+            tbody.append('<tr>' + insert + '</tr>');
+            $('a#remove-row').click(function (event) {
+                var row = $(this).closest('tr');
+                row.empty();
+            });
+
+        });
+
     });
-</script>-->
+</script>
+                            <!--<script>
+                            $('a.form-submit').click(function (event) {
+                                event.preventDefault();
+                                var form_id = $(this).attr('data-form');
+                                $("form#" + form_id).trigger('submit');
+                            });
+                            </script>-->
 @endsection

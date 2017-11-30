@@ -16,7 +16,8 @@ class CreateItemsImagesTable extends Migration {
             $table->increments('id');
             $table->integer('item_id')->unsigned();
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
-            $table->text('img');
+            $table->text('item_image');
+            $table->integer('image_sort_order')->default(0);
             $table->timestamps();
         });
     }

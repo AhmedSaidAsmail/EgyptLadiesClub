@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Exception;
 use App\Models\Filter;
+use App\Models\Filters_item;
 
 class FiltersController extends Controller {
 
@@ -22,11 +23,25 @@ class FiltersController extends Controller {
         $this->itValidate($request);
         $data = $request->all();
         try {
-            Filter::create($data);
+            $filter=Filter::create($data);
+            $data['filter_id']=$filter->id;
+            $this->storeFiltersItems($data);
         } catch (Exception $ex) {
             return redirect()->back()->with('errorMsg', $ex->getMessage());
         }
         return redirect()->route('filter.index')->with('success', ' Filter has been inserted');
+    }
+    private function storeFiltersItems(array $data){
+        if(!empty($data['filter_en_name'])){
+            for($i=0;$i<count($data['filter_en_name']);$i++){
+                $item=new Filters_item;
+                $item->filter_id=$data['filter_id'];
+                $item->filter_en_name=$data['filter_en_name'][$i];
+                $item->filter_ar_name=$data['filter_ar_name'][$i];
+                $item->filter_sort_order=$data['filter_sort_order'][$i];
+                $item->save();
+            }
+        }
     }
 
     public function destroy($id) {

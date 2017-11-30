@@ -16,10 +16,10 @@ class CreateDiscounts extends Migration {
             $table->increments('id');
             $table->integer('item_id')->unsigned();
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
-            $table->integer('quantity');
-            $table->integer('price');
-            $table->date('date_start');
-            $table->date('date_end');
+            $table->integer('dis_quantity');
+            $table->integer('dis_price');
+            $table->text('date_start');
+            $table->text('date_end');
             $table->timestamps();
         });
     }

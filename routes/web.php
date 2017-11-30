@@ -30,7 +30,10 @@ Route::group(['prefix' => 'supplier', 'middleware' => 'auth:supplier'], function
     Route::get('', function() {
         return view('Supplier.Welcome');
     })->name('spplier.welcome');
+    Route::resource('suItems','Supplier\ItemController');
+    Route::get('category/filters/get','Supplier\ItemController@getFilters')->name('item.get.filters');
 });
+// public Web
 Route::get('', function() {
     return '';
 })->name('home');

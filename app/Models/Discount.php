@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Discount extends Model
 {
-    protected $fiilable=['item_id','quantity','price','date_start','date_end'];
+    protected $fillable=['item_id','dis_quantity','dis_price','date_start','date_end'];
+    public function item(){
+        return $this->belongsTo(\App\Models\Item::class);
+    }
 }

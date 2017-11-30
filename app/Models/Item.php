@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model {
 
-    protected $fillbale = ['supplier_id', 'categorie_id', 'brand_id', 'model', 'img', 'price', 'quantity', 'min_quantity', 'shipping', 'date_available'];
+    protected $fillable = ['supplier_id', 'categorie_id', 'brand_id', 'model', 'img', 'price', 'quantity', 'min_quantity', 'shipping', 'date_available'];
 
     public function supplier() {
         return $this->belongsTo(\App\Supplier::class);

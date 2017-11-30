@@ -20,6 +20,9 @@ class Categorie extends Model {
         'keywords',
         'description',
         'img'];
+    public function childs(){
+        return $this->hasMany(\App\Models\Categorie::class,'parent_id','id');
+    }
 
     public function section() {
         return $this->belongsTo(\App\Models\Section::class);

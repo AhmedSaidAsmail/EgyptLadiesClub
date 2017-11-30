@@ -16,9 +16,9 @@ class CreateFiltersItemsTable extends Migration {
             $table->increments('id');
             $table->integer('filter_id')->unsigned();
             $table->foreign('filter_id')->references('id')->on('filters')->onDelete('cascade');
-            $table->string('en_name')->unique();
-            $table->string('ar_name')->unique();
-            $table->integer('sort_order');
+            $table->string('filter_ar_name')->unique();
+            $table->string('filter_en_name')->unique();
+            $table->integer('filter_sort_order');
             $table->boolean('has_image')->default(0);
             $table->timestamps();
         });

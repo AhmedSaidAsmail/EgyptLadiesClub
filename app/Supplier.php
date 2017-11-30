@@ -18,5 +18,8 @@ class Supplier  extends User {
         'postal_code',
         'rand_code',
     ];
+    public function items(){
+        return $this->hasMany(\App\Models\Item::class);
+    }
 
 }
