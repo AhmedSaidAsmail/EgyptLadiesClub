@@ -11,6 +11,15 @@
     </head>
     <body>
         <div class="container">
+            @if(count($errors)>0)
+            <div class="alert alert-danger alert-dismissable">
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                    @endforeach    
+                </ul>
+            </div>
+            @endif
             <h1>Shop Details</h1>
             <h2 class="form-header">Set Password*</h2>
             <form method="post" action="{{route('supplier.setPassword',['id'=>$id])}}">

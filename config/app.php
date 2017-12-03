@@ -142,6 +142,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         App\Src\Facades\UploadFacadesServiceProvider::class,
+        Modelizer\Selenium\SeleniumServiceProvider::class,
         /*
          * Package Service Providers...
          */

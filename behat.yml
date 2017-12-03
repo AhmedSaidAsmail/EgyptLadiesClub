@@ -1,0 +1,19 @@
+default:
+    suites:
+        web_features:
+            paths: [%paths.base%/features/web]
+            contexts: [WebContext]
+        supplier_features:
+            paths: [%paths.base%/features/supplier]
+            contexts: [SupplierContext]
+        admin_feature:
+            paths: [%paths.base%/features/admin]
+            contexts: [AdminContext]
+    extensions:
+        Cjm\Behat\StepThroughExtension: ~
+        Behat\MinkExtension:
+            base_url: "http://localhost/EgyptLadiesClub/public"
+            sessions:
+                default:
+                    selenium2:
+                        wd_host: "http://localhost:4444/wd/hub"

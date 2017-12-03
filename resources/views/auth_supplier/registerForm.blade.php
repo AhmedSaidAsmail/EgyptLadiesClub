@@ -8,8 +8,25 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
         <link rel="stylesheet" href="{{asset('css/register.css')}}">
+        <script src="{{asset('adminlte/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
+        <script src="{{asset('adminlte/bootstrap/js/bootstrap.min.js')}}"></script>
     </head>
     <body>
+        @if(session('failure'))
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{sesseion('failure')}}
+        </div>
+        @elseif(count($errors)>0)
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>{{$error}}</li>
+                @endforeach 
+            </ul>
+        </div>
+        @endif
         <div class="container">
             <h1>Shop Details</h1>
             <h2 class="form-header">Name*</h2>

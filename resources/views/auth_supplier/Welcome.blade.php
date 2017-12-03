@@ -14,7 +14,7 @@
             You’re just a few steps away from becoming a seller on Egypt Ladies Club
         </span>
 
-        <a href="{{route('supplier.reigister')}}" class="btn btn-success btn-lg">Register for free</a>
+        <a href="{{route('supplier.reigister')}}" id="reigister" class="btn btn-success btn-lg">Register for free</a>
         <span class="or">or</span>
         <a href="{{route('supplier.login')}}" class="supplier-intro-login">Login</a>
         <span class="take-less">it takes less than 5 minutes</span>

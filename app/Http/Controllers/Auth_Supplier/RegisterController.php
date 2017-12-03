@@ -28,19 +28,24 @@ class RegisterController extends Controller {
     public function register(Request $request) {
         $this->validator($request);
         $register = $this->create($request);
+        if(!$register){
+            return $register;
+        }
         $this->sendConfirmationMail($request->email, $register->id, $register->rand_code);
-        return redirect()->route('supplier.index')->with('confirmMail','an email confirmaion has benn sent to '.$request->email. ' ,Please check your inbox and click the confirmation link');
+        return redirect()->route('supplier.index')->with('confirmMail', 'an email confirmaion has benn sent to ' . $request->email . ' ,Please check your inbox and click the confirmation link');
     }
-    public function registerConfirmation($id,$rand_code){
+
+    public function registerConfirmation($id, $rand_code) {
         $this->checkLink($id, $rand_code);
-        return view('auth_supplier.setPassword',['id'=>$id]);
+        return view('auth_supplier.setPassword', ['id' => $id]);
     }
-    public function setPassword(Request $request,$id){
+
+    public function setPassword(Request $request, $id) {
         $this->validate($request, [
             'password' => 'required|min:6|confirmed',
         ]);
-        $supplier= Supplier::find($id);
-        $supplier->update(['password'=>bcrypt($request->password),'confirm'=>1]);
+        $supplier = Supplier::find($id);
+        $supplier->update(['password' => bcrypt($request->password), 'confirm' => 1]);
         return redirect()->route('supplier.login');
     }
 
@@ -61,20 +66,26 @@ class RegisterController extends Controller {
         $data = $request->all();
         $data['confirm'] = 0;
         $data['rand_code'] = md5(uniqid(rand(), TRUE));
-        return Supplier::create($data);
+        try {
+            Supplier::create($data);
+            return true;
+        } catch (Exception $ex) {
+            return redirect()->back()->with('failure', $ex->getMessage());
+        }
     }
 
     protected function sendConfirmationMail($email, $id, $remmber_token) {
         Mail::to($email)->send(new registerConfirmation($id, $remmber_token));
     }
-    protected function checkLink($id,$rand_code){
-        $supplier= Supplier::find($id);
-        if($supplier->rand_code!==$rand_code){
+
+    protected function checkLink($id, $rand_code) {
+        $supplier = Supplier::find($id);
+        if ($supplier->rand_code !== $rand_code) {
             throw new Exception('This Link is not valid');
-        }elseif($supplier->confirm!==0 && !is_null($supplier->password)){
+        }
+        elseif ($supplier->confirm !== 0 && !is_null($supplier->password)) {
             throw new Exception('This Link already used before');
         }
-        
     }
 
 }
