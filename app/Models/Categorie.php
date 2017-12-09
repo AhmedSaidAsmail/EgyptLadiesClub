@@ -34,6 +34,9 @@ class Categorie extends Model {
     public function categories_filters(){
         return $this->hasMany(\App\Models\Categories_filter::class);
     }
+    public function items(){
+        return $this->hasMany(\App\Models\Item::class);
+    }
 
     public function delete() {
         $this->categories_filters()->delete();

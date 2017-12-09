@@ -4,7 +4,7 @@
     <section class="content-header">
         <h1> Products <small><a href="">Home</a> / <a href="">Products</a></small> </h1>
         <ul class="right-links list-inline">
-            <li><button form="create_item" class="btn btn-info"><i class="fa fa-floppy-o"></i></button></li>
+            <li><button form="create_item" id="create_item_done" class="btn btn-info"><i class="fa fa-floppy-o"></i></button></li>
             <li><a href="" class="btn btn-warning"><i class="fa fa-reply"></i></a></li>
         </ul>
     </section>
@@ -154,8 +154,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-2"><label>Description<span class="text-danger">*</span></label></div>
-                                                    <div class="col-md-10">
-                                                        <textarea class="textarea" name="en_text" style="width:100%;" required></textarea>
+                                                    <div class="col-md-10" id="textarea">
+                                                        <textarea class="textarea"  name="en_text" style="width:100%;" required></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -186,7 +186,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-2"><label>Description<span class="text-danger">*</span></label></div>
-                                                    <div class="col-md-10">
+                                                    <div class="col-md-10" id="textarea">
                                                         <textarea class="textarea" name="ar_text" style="width:100%;" required></textarea>
                                                     </div>
                                                 </div>
@@ -273,7 +273,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th colspan="2"></th>
-                                                <th><a href="#imageTable" id="insertRow" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a></th>
+                                                <th><a href="#imageTable" id="insertRow" class="btn btn-primary btn-sm second-insert"><i class="fa fa-plus"></i></a></th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -283,24 +283,26 @@
 
                     </div>
                     <!-- /.box-header -->
+
                     <div style="display: none;">
+                        <a href="#" id="remove_wysihtml5">remove</a>
                         <table id="imageTable">
                             <tr>
-                                <td><input type="file" class="form-control" name="item_image[]"></td>
-                                <td><input type="number" class="form-control" name="image_sort_order[]" min="0"></td>
+                                <td><input type="file" class="form-control item_image" name="item_image[]"></td>
+                                <td><input type="number" class="form-control image_sort_order" name="image_sort_order[]" min="0"></td>
                                 <td><a href="#" id="removeRow" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></a></td>
                             </tr>
                         </table>
                         <table id="discountTable">
                             <tr>
-                                <td><input type="text" class="form-control" name="dis_price[]"</td>
-                                <td><input type="number" min="1" class="form-control" name="dis_quantity[]"</td>
+                                <td><input type="text" class="form-control dis_price" name="dis_price[]"></td>
+                                <td><input type="number" min="1" class="form-control dis_quantity" name="dis_quantity[]"></td>
                                 <td>
                                     <div class="input-group date">
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" name="date_start[]" class="form-control pull-right" id="datepicker2">
+                                        <input type="text" name="date_start[]" class="form-control pull-right date_start" id="datepicker2">
                                     </div>  
                                 </td>
                                 <td>
@@ -308,12 +310,13 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" name="date_end[]" class="form-control pull-right" id="datepicker3">
+                                        <input type="text" name="date_end[]" class="form-control pull-right date_end" id="datepicker3">
                                     </div>  
                                 </td>
                                 <td><a href="#" id="removeRow" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></a></td>
                             </tr>
                         </table>
+
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -374,7 +377,9 @@ $(function () {
         autoclose: true
     });
 
-    $(".textarea").wysihtml5();
+    $(".textarea").wysihtml5({
+        "html": true
+    });
 
 });
 $(function () {
@@ -418,7 +423,21 @@ $(function () {
             linkRow.empty();
         });
     });
+    $("a#remove_wysihtml5").click(function (event) {
+        event.preventDefault();
+
+        $("div#textarea").each(function () {
+            var input = $(this).find('textarea');
+            var inputName = input.attr('name');
+            if (input.hasClass('textarea')) {
+                $(this).empty();
+                $(this).append('<textarea class="form-control" name="' + inputName + '"></textarea>');
+            }
+
+        });
+    });
 });
+document.getElementById("en_text").innerHTML = "Some text to enter";
 </script>
 @endsection
 

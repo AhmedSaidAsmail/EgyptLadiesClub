@@ -1,5 +1,5 @@
 
-<?php //echo "<pre>" . print_r(Session::all(), true)                         ?>
+<?php //echo "<pre>" . print_r(Session::all(), true)                               ?>
 @extends('Supplier.Layouts.Layout_Basic')
 @section('title','Items Panel')
 @section ('Extra_Css')
@@ -25,7 +25,7 @@
                 <div class="box">
                     <div class="box-header with-border">
                         <div class="form-group">
-                            <a href="{{route('suItems.create')}}" class="btn btn-block btn-danger"><i class="fa fa-bicycle fa-lg"></i> Add New Activity</a>
+                            <a href="{{route('suItems.create')}}" class="btn btn-block btn-danger"><i class="fa fa-bicycle fa-lg"></i> Add New Product</a>
                         </div>
                         @if(session('success'))
                         <div class="alert alert-success alert-dismissible">
@@ -36,7 +36,7 @@
                         @if(session('failure'))
                         <div class="alert alert-danger alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <h4><i class="icon fa fa-ban"></i> {{session('failure')}} </h4>
+                            {{session('failure')}} 
                         </div>
                         @endif
                         @if(count($errors)>0)
@@ -73,38 +73,44 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="items" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>City</th>
-                                    <th>Attraction</th>
-                                    <th>Tour</th>
-                                    <th>Visitors</th>
-                                    <th>Reviews</th>
-                                    <th>Rating</th>
+                                    <th class="img-td">Image</th>
+                                    <th>Product Name</th>
+                                    <th>Model</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
                                     <th>Status</th>
-                                    <th>Reservations</th>
-                                    <th>Recommended</th>
-                                    <th>#Action</th>
+                                    <th>Option</th>
                                 </tr>
                             </thead>
                             <tbody>
-
-
+                                @foreach($items as $item)
+                                <tr>
+                                    <td class="img-td"><img src="{{asset('images/items/thumb/'.$item->img)}}" class="img-thumbnail" style="width: 60px;"></td>
+                                    <td>{{$item->details->en_name}}</td>
+                                    <td>{{$item->model}}</td>
+                                    <td>{{$item->price}}</td>
+                                    <?php $class = ($item->quantity > $item->min_quantity) ? "success" : "danger"; ?>
+                                    <td><span class="btn btn-{{$class}} danger btn-sm">{{$item->quantity}}</span</td>
+                                    <td>@if($item->status) <i class="fa fa-circle text-green"></i> @else <i class="fa fa-circle text-gray"></i> @endif </td>
+                                    <td>
+                                        <a href="{{route('suItems.edit',['id'=>$item->id])}}" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
+                                    </td>
+                                </tr>
+                                @endforeach
                             </tbody>
 
                             <tfoot>
                                 <tr>
-                                    <th>City</th>
-                                    <th>Attraction</th>
-                                    <th>Tour</th>
-                                    <th>Visitors</th>
-                                    <th>Reviews</th>
-                                    <th>Rating</th>
+                                    <th class="img-td">Image</th>
+                                    <th>Product Name</th>
+                                    <th>Model</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
                                     <th>Status</th>
-                                    <th>Reservations</th>
-                                    <th>Recommended</th>
-                                    <th>#Action</th>
+                                    <th>Option</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -121,15 +127,7 @@
 <script src="{{asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
 <script>
 $(function () {
-    $("#example1").DataTable();
-    $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false
-    });
+    $("#items").DataTable();
 });
 </script>
 @endsection

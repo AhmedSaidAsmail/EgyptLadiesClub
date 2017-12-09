@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model {
 
-    protected $fillable = ['supplier_id', 'categorie_id', 'brand_id', 'model', 'img', 'price', 'quantity', 'min_quantity', 'shipping', 'date_available'];
+    protected $fillable = ['supplier_id', 'categorie_id', 'brand_id', 'model', 'img', 'price', 'quantity', 'min_quantity', 'shipping', 'date_available','status','enable'];
 
     public function supplier() {
         return $this->belongsTo(\App\Supplier::class);
     }
 
-    public function category() {
-        return $this->belongsTo(Categorie::class);
+    public function categorie() {
+        return $this->belongsTo(\App\Models\Categorie::class);
     }
 
     public function brands() {

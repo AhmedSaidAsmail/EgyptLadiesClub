@@ -24,3 +24,9 @@ ul.right-links>li{
     padding-top: 20px;
 }
 #basicToggle{ display:none;}
+#items  td{
+    vertical-align: middle;
+}
+.img-td{
+    text-align: center;
+}

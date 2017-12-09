@@ -27,6 +27,8 @@ class CreateItemsTable extends Migration {
             $table->integer('min_quantity');
             $table->boolean('shipping')->default(1);
             $table->text('date_available');
+            $table->boolean('status')->default(0);
+            $table->boolean('enable')->default(1);
             $table->timestamps();
         });
     }
