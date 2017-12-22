@@ -1,6 +1,7 @@
 @extends('Admin.Layouts.Layout_Basic')
 @section('title','Main Category Panel')
 @section ('Extra_Css')
+<link rel="stylesheet" href="{{asset('adminlte/plugins/select2/select2.min.css')}}">
 <link rel="stylesheet" href="{{asset('adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('css/admin/style.css')}}">
 @endsection
@@ -24,7 +25,7 @@
                         @if(session('success'))
                         <div class="alert alert-success alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                           <i class="icon fa fa-ban"></i> {{session('success')}}
+                            <i class="icon fa fa-ban"></i> {{session('success')}}
                         </div>
                         @endif
                         @if(Session::has('error'))
@@ -95,11 +96,33 @@
                                             <input  value="0" name="arrangement"  class="form-control" required>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>Symbol</label>
+                                            <input type="text" class="form-control" name="symbol" list="cars" />
+                                            <datalist id="cars">
+                                                @foreach($sections->pluck('symbol')->toArray() as $symbol)
+                                                <option value="{{$symbol}}">{{$symbol}}</option>
+                                                @endforeach
+                                            </datalist> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Image</label>
                                             <input type="file" class="form-control" name="img" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Brands:</label>
+                                            <select class="form-control select2" name="brands[]" multiple="multiple" data-placeholder="Select Brands" style="width: 100%;">
+                                                @foreach(\App\Models\Brand::all() as $brand)
+                                                <option value="{{$brand->id}}">{{$brand->en_name}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -196,9 +219,11 @@
 <script src="{{asset('js/admin/admin.js')}}"></script>
 <script src="{{asset('adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('adminlte/plugins/select2/select2.full.min.js')}}"></script>
 <script>
 $(function () {
     $("#example1").DataTable();
+    $(".select2").select2();
 });
 </script>
 @endsection

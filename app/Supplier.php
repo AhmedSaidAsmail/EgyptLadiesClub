@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Supplier  extends User {
+class Supplier extends User {
 
     protected $fillable = [
         'email',
@@ -18,8 +18,13 @@ class Supplier  extends User {
         'postal_code',
         'rand_code',
     ];
-    public function items(){
+
+    public function items() {
         return $this->hasMany(\App\Models\Item::class);
+    }
+
+    public function reviews() {
+        return $this->hasManyThrough(\App\Models\Review::class, \App\Models\Item::class);
     }
 
 }

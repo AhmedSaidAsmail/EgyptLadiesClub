@@ -20,7 +20,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:web'], function() {
     Route::resource('/filter', 'Admin\FiltersController', ['except' => ['destroy']]);
     Route::delete('filter/destroy', ['uses' => 'Admin\FiltersController@destroySelected'])->name('filter.destroy.selected');
     Route::resource('/sections', 'Admin\SectionsController');
-    Route::resource('categories', 'Admin\CategoriesController', ['except' => ['create', 'show', 'destroy']]);
+    Route::resource('categories', 'Admin\CategoriesController', ['except' => [ 'show', 'destroy']]);
     Route::resource('brands', 'Admin\BrandsController', ['except' => ['destroy', 'show', 'update', 'edit']]);
     Route::delete('brands/destroy', ['uses' => 'Admin\BrandsController@destroySelected'])->name('brand.destroy.selected');
     Route::resource('/suppliers', 'Admin\SuppliersController', ['except' => ['destroy', 'create', 'store', 'edit']]);
@@ -32,8 +32,9 @@ Route::group(['prefix' => 'supplier', 'middleware' => 'auth:supplier'], function
     })->name('spplier.welcome');
     Route::resource('suItems','Supplier\ItemController');
     Route::get('category/filters/get','Supplier\ItemController@getFilters')->name('item.get.filters');
+    Route::resource('/reviews_supplier', 'Supplier\ReviewsController', ['only' => ['index', 'show']]);
 });
 // public Web
-Route::get('', function() {
-    return '';
-})->name('home');
+Route::get('','FrontEnd\HomeController@home')->name('home');
+Route::get('c/{category}/{id}/{brand?}','FrontEnd\HomeController@categoryShow')->name('category.show');
+Route::get('s/{section}/{id}}','FrontEnd\HomeController@sectionShow')->name('section.show');

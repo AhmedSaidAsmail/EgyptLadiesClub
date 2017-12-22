@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Http\UploadedFile;
 use Exception;
 use App\Src\Facades\UploadFacades;
 use App\Models\Brand;
@@ -25,11 +25,10 @@ class BrandsController extends Controller {
     public function store(Request $request) {
         $this->itValidate($request);
         $data = $request->all();
-        $this->createImage($request, $data);
+        $data['img']=$this->uploadImage($data['img']);
         try {
             Brand::create($data);
         } catch (Exception $ex) {
-            UploadFacades::removeImg();
             return redirect()->back()->with('errorMsg', $ex->getMessage());
         }
         return redirect()->route('brands.index')->with('success', ' Brand has been inserted');
@@ -74,12 +73,11 @@ class BrandsController extends Controller {
                     'en_name' => 'required',
         ]);
     }
-
-    private function createImage(Request $request, array &$items) {
-        if ($request->hasFile('img')) {
-            $file = Input::file('img');
-            $items['img'] = UploadFacades::Upload($file, $this->_path, 250);
+        private function uploadImage($value) {
+        if ($value instanceof UploadedFile) {
+            return UploadFacades::Upload($value, $this->_path, 250);
         }
+        return $value;
     }
 
 }

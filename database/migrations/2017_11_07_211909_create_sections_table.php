@@ -22,6 +22,7 @@ class CreateSectionsTable extends Migration
             $table->boolean('top_list')->default(0);
             $table->integer('arrangement')->default(0);
             $table->text('img')->nullable();
+            $table->text('symbol')->nullable();
             $table->text('keywords')->nullable();
             $table->text('description')->nullable();
             $table->rememberToken();

@@ -14,11 +14,18 @@ class Section extends Model {
         'top_list',
         'arrangement',
         'img',
+        'symbol',
         'keywords',
         'description'];
-    public function categories(){
-        return $this->hasMany(\App\Models\Categorie::class);
+
+    public function categories() {
+        return $this->hasMany(Categorie::class);
     }
+
+    public function brands() {
+        return $this->belongsToMany(Brand::class, 'section_brands');
+    }
+
     public function delete() {
         $this->categories()->delete();
         return parent::delete();

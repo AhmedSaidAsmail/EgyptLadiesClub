@@ -41,6 +41,9 @@ class Item extends Model {
     public function related() {
         return $this->hasMany(Related_product::class);
     }
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
 
     public function delete() {
         $this->details()->delete();

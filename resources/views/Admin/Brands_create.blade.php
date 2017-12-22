@@ -34,7 +34,7 @@
                         <h3 class="box-title"><i class="fa fa-pencil"></i> Add Filter</h3>
                     </div>
                     <!-- /.box-header -->
-                    <form method="post" id="create_brands" action="{{route('brands.store')}}">
+                    <form method="post" id="create_brands" action="{{route('brands.store')}}" enctype="multipart/form-data">
                         {{csrf_field()}}
                         <div class="box-body">
                             <div class="row">

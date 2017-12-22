@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http;
+
 use Illuminate\Database\Eloquent\Collection;
 
 class HierarchicalData {
@@ -18,11 +19,15 @@ class HierarchicalData {
         return $instance->setArray()->parseTree();
     }
 
+    public static function printTree(Collection $categories) {
+        $instance = self::getInstance($categories);
+        $tree= $instance->setArray()->parseTree();
+        $instance->printArray($tree);
+    }
+
     public static function getInstance($categories) {
-        if (is_null(self::$instance)) {
-            self::$instance = new self($categories);
-        }
-        return self::$instance;
+
+        return self::$instance = new self($categories);
     }
 
     private function setArray() {
@@ -38,25 +43,37 @@ class HierarchicalData {
             if ($category->parent_id == $root) {
                 unset($this->parentChildsArray[$child]);
                 $return[] = array(
-                    'id'=>$child,
-                    'name'=>$category->en_name,
+                    'id' => $child,
+                    'name' => $category->en_name,
                     'category' => $category,
                     'children' => $this->parseTree($child)
                 );
             }
         }
-        return empty($return) ? null : $return; 
-    }
-    public static function flatten(array $array , &$returnArray=[]){
-        
-        foreach ($array as $category){
-            $returnArray[$category['id']]=$category['category'];
-            if(count($category['children'])>0){
-                static::flatten($category['children'],$returnArray);
-            }
-        }
-        return empty($returnArray) ? null : $returnArray; 
+        return empty($return) ? null : $return;
     }
 
+    public static function flatten(array $array, &$returnArray = []) {
+
+        foreach ($array as $category) {
+            $returnArray[$category['id']] = $category['category'];
+            if (count($category['children']) > 0) {
+                static::flatten($category['children'], $returnArray);
+            }
+        }
+        return empty($returnArray) ? null : $returnArray;
+    }
+
+    public function printArray($tree) {
+        if (!is_null($tree) && count($tree) > 0) {
+            echo '<ul>';
+            foreach ($tree as $node) {
+                echo '<li><a href="">' . $node['name']."</a>";
+                $this->printArray($node['children']);
+                echo '</li>';
+            }
+            echo '</ul>';
+        }
+    }
 
 }

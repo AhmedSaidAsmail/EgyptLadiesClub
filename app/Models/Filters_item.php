@@ -10,4 +10,7 @@ class Filters_item extends Model
      public function filters(){
          return $this->belongsTo(\App\Models\Filter::class);
      }
+     public function categoryItems(array $catgegories){
+         return $this->belongsToMany(Item::class,'items_filters')->whereIn('categorie_id',$catgegories)->get();
+     }
 }

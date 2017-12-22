@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use Exception;
-use App\Src\Facades\UploadFacades;
+use Illuminate\Http\UploadedFile;
+use UploadImage;
 use App\Models\Categorie;
 use App\Models\Filter;
 use App\Models\Categories_filter;
+use App\Src\ArrayMethods;
 
 class CategoriesController extends Controller {
 
@@ -17,21 +18,27 @@ class CategoriesController extends Controller {
 
     public function index() {
         $categories = Categorie::all();
+        return view('Admin.Categories_all', ['activeCategory' => true, 'categories' => $categories]);
+    }
+
+    public function create() {
+        $categories = Categorie::all();
         $filters = Filter::all();
-        return view('Admin.Categories_all', ['categories' => $categories, 'filters' => $filters, 'activeCategory' => true]);
+        return view('Admin.Categories_create', ['categories' => $categories, 'filters' => $filters, 'activeCategory' => true]);
     }
 
     public function store(Request $request) {
         $this->itValidate($request);
         $item = $request->all();
-        (!is_null($request->parent_id)) ? $this->changing_section_according_to_parent($item, $request->parent_id) : "";
-        $this->changeImage($request, $item);
+        (!is_null($request->parent_id)) ? $this->changeSctionParent($item, $request->parent_id) : "";
+        $links = ArrayMethods::colleactRecursiveArray($request, 'category_links', $this->_path);
         try {
+            $item['img'] = $this->uploadImage($item['img']);
             $category = Categorie::create($item);
-            $this->createFilters($category->id, $item['filters']);
+            $category->filters()->sync($item['filters']);
+            $category->category_links()->createMany($links);
         } catch (Exception $e) {
-            UploadFacades::removeImg();
-            return redirect()->back()->with('errorMsg', $e->getMessage());
+            return redirect()->back()->with('failure', $e->getMessage());
         }
         return redirect()->route('categories.index')->with('success', $request->en_name . ' has been inserted');
     }
@@ -83,22 +90,23 @@ class CategoriesController extends Controller {
                     'title' => 'required',
                     'arrangement' => 'required|integer',
                     'img' => 'image',
+//                    'link_img' => 'image',
                     'filters' => 'required'
         ]);
     }
 
-    private function changeImage(Request $request, array &$items) {
-        if ($request->hasFile('img')) {
-            $file = Input::file('img');
-            $items['img'] = UploadFacades::Upload($file, $this->_path, 250);
+    private function uploadImage($value) {
+        if ($value instanceof UploadedFile) {
+            return UploadImage::Upload($value, $this->_path, 250);
         }
+        throw new Exception('The intro image must not be null');
     }
 
-    private function createFilters($category_id, array $filters) {
-        foreach ($filters as $filter) {
-            Categories_filter::create(['categorie_id' => $category_id, 'filter_id' => $filter]);
-        }
-    }
+//    private function createFilters($category_id, array $filters) {
+//        foreach ($filters as $filter) {
+//            Categories_filter::create(['categorie_id' => $category_id, 'filter_id' => $filter]);
+//        }
+//    }
 
     public static function analyzeCatgoryName($id, array $name = null) {
         $category = Categorie::find($id);
@@ -124,7 +132,7 @@ class CategoriesController extends Controller {
         return FALSE;
     }
 
-    private function changing_section_according_to_parent(&$data, $parent_id) {
+    private function changeSctionParent(&$data, $parent_id) {
         $parent_category = Categorie::find($parent_id);
         $section = $parent_category->section_id;
         $data["section_id"] = $section;

@@ -90,7 +90,7 @@ class ItemController extends Controller {
         $imgArray = $this->colleactRecursiveArray($request, ['image_id', 'item_image', 'image_sort_order'], 'image_id');
         SyncData::sync($item->discounts, $item->discounts(), 'discounts', $discountsArray);
         SyncData::sync($item->images, $item->images(), 'items_images', $imgArray);
-//        dd($imgArray);
+        return redirect()->route('suItems.index')->with('success', 'The product has been updated');
     }
 
     public function destroy($id) {

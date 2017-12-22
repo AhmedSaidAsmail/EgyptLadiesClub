@@ -10,7 +10,7 @@ class UploadFacadesServiceProvider extends ServiceProvider {
 
     }
     public function register() {
-        App::bind('upload', function() {
+        App::bind('UploadImage', function() {
             return new \App\Src\UploadFacades();
         });
     }

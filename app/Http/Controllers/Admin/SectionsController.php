@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
-use App\Src\Facades\UploadFacades;
+use UploadImage;
 use Exception;
 use App\Models\Section;
 
@@ -33,15 +33,12 @@ class SectionsController extends Controller {
     public function store(Request $request) {
         $this->itValidate($request);
         $item = $request->all();
-        if ($request->hasFile('img')) {
-            $file = Input::file('img');
-            $item['img'] = UploadFacades::Upload($file, $this->_path, 250);
-        }
+        $item['img'] = $this->uploadImage($item['img']);
         try {
-            Section::create($item);
+            $section = Section::create($item);
+            $section->brands()->sync($item['brands']);
         } catch (Exception $e) {
-            UploadFacades::removeImg();
-            return redirect()->back()->with('error',$e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
         return redirect()->route('sections.index')->with('success', $request->en_name . ' has been inserted');
     }
@@ -60,12 +57,12 @@ class SectionsController extends Controller {
         $item = $request->all();
         $Maincategory = Countries::find($id);
         $exImg = $Maincategory->img;
-        $this->changeImage($request, $item);
+        $item['img'] = $this->uploadImage($item['img']);
         try {
             $Maincategory->update($item);
-            (isset($exImg) && $request->hasfile('img')) ? UploadFacades::removeExImg($exImg, $this->_path) : '';
+            (isset($exImg) && $request->hasfile('img')) ? UploadImage::removeExImg($exImg, $this->_path) : '';
         } catch (\Exception $e) {
-            UploadFacades::removeImg();
+            UploadImage::removeImg();
             $request->session()->flash('errorDetails', $e->getMessage());
             $request->session()->flash('errorMsg', "Oops something went wrong !!");
         }
@@ -82,7 +79,7 @@ class SectionsController extends Controller {
             $_instance->destroy($category->id);
         }
         $MainCategory->delete();
-        (isset($exImg)) ? UploadFacades::removeExImg($exImg, $this->_path) : '';
+        (isset($exImg)) ? UploadImage::removeExImg($exImg, $this->_path) : '';
         Session::flash('deleteStatus', "Main Category No: {$id} is Deleted !!");
         return redirect(route('MainCategory.index'));
     }
@@ -97,11 +94,11 @@ class SectionsController extends Controller {
         ]);
     }
 
-    private function changeImage(Request $request, array &$items) {
-        if ($request->hasFile('img')) {
-            $file = Input::file('img');
-            $items['img'] = UploadFacades::Upload($file, $this->_path, 250);
+    private function uploadImage($value) {
+        if ($value instanceof UploadedFile) {
+            return UploadImage::Upload($value, $this->_path, 250);
         }
+        return $value;
     }
 
 }

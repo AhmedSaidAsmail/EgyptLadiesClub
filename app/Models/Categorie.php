@@ -20,8 +20,9 @@ class Categorie extends Model {
         'keywords',
         'description',
         'img'];
-    public function childs(){
-        return $this->hasMany(\App\Models\Categorie::class,'parent_id','id');
+
+    public function childs() {
+        return $this->hasMany(\App\Models\Categorie::class, 'parent_id', 'id');
     }
 
     public function section() {
@@ -29,12 +30,22 @@ class Categorie extends Model {
     }
 
     public function filters() {
-        return $this->belongsToMany(\App\Models\Filter::class,'categories_filters');
+        return $this->belongsToMany(\App\Models\Filter::class, 'categories_filters');
     }
-    public function categories_filters(){
+
+    public function brands() {
+        return $this->belongsToMany(Brand::class, 'category_brands');
+    }
+
+    public function categories_filters() {
         return $this->hasMany(\App\Models\Categories_filter::class);
     }
-    public function items(){
+
+    public function category_links() {
+        return $this->hasMany(Category_link::class);
+    }
+
+    public function items() {
         return $this->hasMany(\App\Models\Item::class);
     }
 

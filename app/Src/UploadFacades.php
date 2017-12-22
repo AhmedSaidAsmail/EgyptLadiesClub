@@ -61,7 +61,7 @@ class UploadFacades {
         return $this;
     }
 
-    public function Upload(UploadedFile $file, $path, $width) {
+    public function Upload(UploadedFile $file, $path, $width,$exImage=null) {
         $instance = self::getInstance($file);
         return $instance->setFile($file)
                         ->setPath($path)
@@ -71,20 +71,6 @@ class UploadFacades {
                         ->saveThumb()
                         ->moveImage()
                 ->_imageName;
-    }
-
-    public function removeImg() {
-        (isset(self::$_img['image']) && file_exists(self::$_img['image'])) ? unlink(self::$_img['image']) : '';
-        (isset(self::$_img['thumb']) && file_exists(self::$_img['thumb'])) ? unlink(self::$_img['thumb']) : '';
-    }
-
-    // to avoid if not created new entry  to don't delete the old image
-    public function removeExImg($img, $path) {
-        $newPath = public_path() . $path;
-        $exImg = $newPath . $img;
-        $exThmub = $newPath . 'thumb/' . $img;
-        (file_exists($exImg)) ? unlink($exImg) : '';
-        (file_exists($exThmub)) ? unlink($exThmub) : '';
     }
 
 }

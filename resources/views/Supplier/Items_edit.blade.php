@@ -10,6 +10,28 @@
     </section>
     <section class="content">
         <div class="row">
+            <div class="col-md-9">
+                <div class="row reviews-summary-container">
+                    <h2>Customers Reviews <span>({{$item->reviews->count()}} Reviews)</span></h2>
+                    <div class="row reviews-summary">
+                        <div class="col-md-12">
+                            <span class="reviews-summary-title">Overall rating</span>
+                            <div class="overall-rating">
+                                {{\App\Http\ReviewsCalc::getRateStar($item)}}
+                                {{\App\Http\ReviewsCalc::calc($item)}} / 5
+                            </div>
+                            <span class="reviews-summary-based">based on {{$item->reviews()->where('confirm','=',1)->count()}} reviews</span>
+                        </div>
+ 
+                    </div>
+                    <div style="margin-top:10px;">
+
+                            <a href="{{route('suItems.show',['item'=>$item->id])}}" class="btn btn-default"><i class="fa fa-comment"></i> See all activity reviews</a>   
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 @if(session('errorMsg'))
                 <div class="alert alert-danger alert-dismissible">
