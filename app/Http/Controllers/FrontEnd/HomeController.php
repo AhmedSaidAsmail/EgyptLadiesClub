@@ -14,14 +14,25 @@ class HomeController extends Controller {
         return view('Public.home', ['sections' => $sections]);
     }
 
-    public function categoryShow(Request $request, $categoryName, $id, $barnd = null) {
-        $category = Categorie::find($id);
-        $allCategories = categoryChilds($category);
-        $items = $allCategories->getItems();
-        return view('Public.category', ['category_name' => $categoryName,
-            'category' => $category,
-            'allCategories' => $allCategories,
-            'items'=>$items]);
+    public function categoryShow(Request $request, $categoryName, $id) {
+        $targetCategory = Categorie::find($id);
+        $catgoryClass = analyzeCategory($targetCategory, $request);
+        $data = ['category_name' => $categoryName,
+            'category' => $targetCategory,
+            'childs' => $catgoryClass->getChilds(),
+            'items' => $catgoryClass->getItems(),
+            'items_id' => $catgoryClass->getItemsId(),
+            'brands' => $catgoryClass->getBrands(),
+            'filters' => $catgoryClass->getFilters(),
+            'request' => $request->all()];
+        if ($request->ajax()) {
+            return $this->returnAjaxResult($data);
+        }
+        return view('Public.category', $data);
+    }
+    private function returnAjaxResult($data){
+        $data['ajax']=true;
+        return view('Public.Layouts.categoryList', $data);
     }
 
     public function sectionShow($section, $id) {

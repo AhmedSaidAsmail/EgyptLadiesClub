@@ -1,42 +1,114 @@
 <div class="row">
     <div class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
-        @if(checkChilds($category))
-        <div class="list-filters">
-            <div class="list-filter-header">
-                <h3>Category</h3>
-                <i class="fa fa-plus-square"></i>
+        <form method="get" action="{{route('category.show',[$category->en_name,$category->id])}}" id="category_filter">
+
+            @if(count($childs))
+            <div class="list-filters">
+                <div class="list-filter-header">
+                    <h3>Category</h3>
+                    <div  class="collapse-square">
+                        <i class="fa fa-minus"></i>
+                    </div>
+                </div>
+                <div class="filters-options">
+                    @foreach($childs as $child)
+                    <?php
+                    if (isset($request['categories']) && in_array($child['category']->id, $request['categories'])) {
+                        $check = 'checked="checked"';
+                    }
+                    else {
+                        $check = null;
+                    }
+                    ?>
+                    <div class="checkbox">
+                        <label><input type="checkbox"  name="categories[]" value="{{$child['category']->id}}" {{$check}}>
+                            {{$child['category']->en_name}} <span>({{$child['items']}})</span></label>
+                    </div>
+                    @endforeach
+                </div>
             </div>
-            @foreach($allCategories->getChilds() as $child)
-            <div class="checkbox">
-                <label><input type="checkbox" name="category[]" value="{{$child['category']->id}}">{{$child['category']->en_name}} <span>({{$child['items']}})</span></label>
+            @endif
+            <div class="list-filters">
+                <div class="list-filter-header">
+                    <h3>Brands</h3>
+                    <div  class="collapse-square">
+                        <i class="fa fa-minus"></i>
+                    </div>
+                </div>
+                <div class="filters-options">
+                    @foreach($brands as $brand)
+                    <?php
+                    if (isset($request['brands']) && in_array($brand['brand']->id, $request['brands'])) {
+                        $checkBrand = 'checked="checked"';
+                    }
+                    else {
+                        $checkBrand = null;
+                    }
+                    ?>
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="{{$brand['brand']->id}}" name="brands[]" {{$checkBrand}}>
+                            {{$brand['brand']->en_name}} <span>({{$brand['items']}})</span></label>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @foreach($filters as $filter)
+            <div class="list-filters">
+                <div class="list-filter-header">
+                    <h3>{{$filter->en_name}}</h3>
+                    <div  class="collapse-square">
+                        <i class="fa fa-minus"></i>
+                    </div>
+                </div>
+                <div class="filters-options">
+                    @foreach($filter->filter_items as $filter_item)
+                    <?php
+                    if (isset($request['filters']) && in_array($filter_item->id, $request['filters'])) {
+                        $checkFilter = 'checked="checked"';
+                    }
+                    else {
+                        $checkFilter = null;
+                    }
+                    ?>
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="{{$filter_item->id}}" name="filters[]" {{$checkFilter}}>
+                            {{$filter_item->filter_en_name}} 
+                            <span>({{$filter_item->countItems($items_id)}})</span></label>
+                    </div>
+                    @endforeach
+                </div>
             </div>
             @endforeach
-        </div>
-        @endif
-        <div class="list-filters">
-            <div class="list-filter-header">
-                <h3>Brands</h3>
-                <i class="fa fa-plus-square"></i>
+            <div class="list-filters">
+                <div class="list-filter-header">
+                    <h3>Price</h3>
+                    <div  class="collapse-square">
+                        <i class="fa fa-minus"></i>
+                    </div>
+                </div>
+                <div class="filters-options">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>From (EGP)</label>
+                                <input class="form-control min-price" value="{{$items->min('price')}}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>To (EGP)</label>
+                                <input class="form-control max-price" value="{{$items->max('price')}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rangeslider">
+                        <input class="min"  type="range" min="{{$items->min('price')}}" max="{{$items->max('price')}}" value="{{$items->min('price')}}" />
+                        <input class="max"  type="range" min="{{$items->min('price')}}" max="{{$items->max('price')}}" value="{{$items->max('price')}}" />
+                    </div>
+                </div>
+                <button class="btn btn-block btn-primary" style="margin-bottom: 20px;">Apply</button>
             </div>
-            @foreach($allCategories->getBrands() as $brand)
-            <div class="checkbox">
-                <label><input type="checkbox" value="{{$brand->id}}" name="brand[]">{{$brand->en_name}} <span>({{count($brand->categoryItems($allCategories->getCategories_id()))}})</span></label>
-            </div>
-            @endforeach
-        </div>
-        @foreach($allCategories->getFilters() as $filter)
-        <div class="list-filters">
-            <div class="list-filter-header">
-                <h3>{{$filter->en_name}}</h3>
-                <i class="fa fa-plus-square"></i>
-            </div>
-            @foreach($filter->filter_items as $filter_item)
-            <div class="checkbox">
-                <label><input type="checkbox" value="{{$filter_item->id}}" name="filter[]">{{$filter_item->filter_en_name}} <span>({{count($filter_item->categoryItems($allCategories->getCategories_id()))}})</span></label>
-            </div>
-            @endforeach
-        </div>
-        @endforeach
+        </form>
     </div>
     <div class="col-md-10 item-show">
 
@@ -44,7 +116,7 @@
 
         <div class="items-container">
             <?php $itemNo = 1; ?>
-            @foreach ($allCategories->getItems()->slice(0,8)->chunk(4) as $chunk)
+            @foreach ($items->chunk(4) as $chunk)
             <div class="row">
                 @foreach($chunk as $item)
                 <div class="col-md-3" data-no="{{$itemNo}}">
@@ -53,10 +125,10 @@
                             <a href="" class="btn btn-primary">QUICK VIEW</a>
                         </div>
 <!--                        <img class="list-label" src="images/1495467490_4g-Lte-voice-calls-en.png">-->
-                        <img class="list-img" src="{{asset('images/items/thumb/'.$item->img)}}">
+                        <img class="list-img" src="{{asset('images/items/thumb/'.$item['item']->img)}}">
                     </div>
                     <div class="list-item-details">
-                        <h3>{{isset($item->details->en_name)?$item->details->en_name:null}}</h3>
+                        <h3>{{isset($item['item']->details->en_name)?$item['item']->details->en_name:$item['item']->id}}</h3>
                         <div class="row">
                             <div class="col-md-7">
                                 <span class="price-list-active">2,099.00 <label>EGP</label></span>
@@ -78,7 +150,7 @@
                                 <span class="free-shipping">FREE Shipping</span>
                             </div>
                             <div class="col-md-5 text-right">
-                                <img src="images/verifed.png" alt="verived" class="verifed-supplier">
+                                <img src="{{asset('images/verifed.png')}}" alt="verived" class="verifed-supplier">
                             </div>
                         </div>
                     </div>
@@ -88,11 +160,17 @@
                 @endforeach
             </div>
             @endforeach
-            <div id="wating-items" data-start="{{$itemNo-1}}">
-                <div class="warning-gif" style="text-align: center;">
-                    <img src="{{asset('images/loader4.gif')}}" alt="please wait" style="margin-top: -50px; margin-bottom: -50px;">
-                </div>
-            </div>
+
         </div>
     </div>
 </div>
+@if(isset($ajax) && $ajax)
+<script>
+    var form = $("form#category_filter");
+    $("input[type='checkbox']").each(function () {
+        $(this).click(function () {
+            form.trigger('submit');
+        });
+    });
+</script>
+@endif

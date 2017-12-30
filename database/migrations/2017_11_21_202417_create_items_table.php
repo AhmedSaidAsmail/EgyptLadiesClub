@@ -20,6 +20,7 @@ class CreateItemsTable extends Migration {
             $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('brand_id')->unsigned();
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
+            $table->integer('sort_order')->default(0);
             $table->string('model');
             $table->string('img');
             $table->float('price');

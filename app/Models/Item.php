@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model {
 
-    protected $fillable = ['supplier_id', 'categorie_id', 'brand_id', 'model', 'img', 'price', 'quantity', 'min_quantity', 'shipping', 'date_available','status','enable'];
+    protected $fillable = ['supplier_id', 'categorie_id', 'brand_id', 'sort_order', 'model', 'img', 'price', 'quantity', 'min_quantity', 'shipping', 'date_available', 'status', 'enable'];
 
     public function supplier() {
         return $this->belongsTo(\App\Supplier::class);
@@ -23,25 +23,32 @@ class Item extends Model {
     public function details() {
         return $this->hasOne(Items_detail::class);
     }
-    public function filters(){
-        return $this->belongsToMany(Filters_item::class,'items_filters');
+
+    public function filters() {
+        return $this->belongsToMany(Filters_item::class, 'items_filters');
     }
 
     public function item_filters() {
         return $this->hasMany(Items_filter::class);
     }
 
+    public function checkFiltersExists(array $filters) {
+        return $this->hasMany(Items_filter::class)->whereIn('filters_item_id', $filters)->count() > 0 ? true : false;
+    }
+
     public function images() {
         return $this->hasMany(Items_image::class);
     }
-    public function discounts(){
+
+    public function discounts() {
         return $this->hasMany(Discount::class);
     }
 
     public function related() {
         return $this->hasMany(Related_product::class);
     }
-    public function reviews(){
+
+    public function reviews() {
         return $this->hasMany(Review::class);
     }
 

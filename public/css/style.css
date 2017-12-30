@@ -885,13 +885,14 @@ a.list-add-to-cart{
 .list-filters{
     border-bottom: 1px solid #dddddd;
     padding-top: 15px;
+    position: relative;
 
-    
+
 }
 .list-filter-header{
     position: relative;
     margin-bottom: 20px;
-    
+
 }
 .list-filter-header h3{
     font-family: 'Roboto',sans-serif;
@@ -900,19 +901,116 @@ a.list-add-to-cart{
     padding: 0px;
     margin: 0px;
 }
-.list-filter-header i{
+.list-filter-header i.fa-plus-square{
     position: absolute;
     top: 5px;
     right: 0px;
     color: #dddddd;
     font-size: 22px;
 }
+.list-filter-header .collapse-square{
+    position: absolute;
+    background: #FFF;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    right: 0px;
+    top: 0px;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    color: #cccccc;
+    font-size: 14px;
+    padding: 2px;
+    cursor: pointer;
+}
 .list-filters .checkbox{
-       font-family: 'Roboto',sans-serif;
-       color: #7f8799;
-     
+    font-family: 'Roboto',sans-serif;
+    color: #7f8799;
+
 }
 .list-filters .checkbox span{
     color: #9a9a9a;
-    
+
 }
+.list-filters .form-group label{
+    font-family: 'Roboto',sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    color: #949494;
+}
+.list-filters .form-group .form-control{
+    border-radius: 0px;
+
+}
+.filters-options{
+    overflow: hidden;
+    max-height: 500px;
+    transition: all ease .6s;
+
+}
+.collapse-show{
+    max-height: 500px;
+}
+.collapse-hidden{
+    max-height: 0px;
+}
+/** range input **/
+input[type='range'] {
+    width: 100%;
+    height: 30px;
+    overflow: hidden;
+    cursor: pointer;
+    outline: none;
+}
+input[type='range'],
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: #cacaca;
+}
+
+input[type='range']:nth-child(2)::-webkit-slider-runnable-track{
+    background: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    position: relative;
+    height: 17px;
+    width: 17px;
+    margin-top: -7px;
+    background: #188ffb;
+    border: 1px solid #cacaca;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+
+input[type='range']:nth-child(1)::-webkit-slider-thumb{
+    z-index: 2;
+}
+
+.rangeslider{
+    position: relative;
+    height: 40px;
+    width: 100%;
+    display: block;
+    margin-top: -15px;
+
+
+}
+.rangeslider input{
+    position: absolute;
+}
+.loading-result{
+    width: 100%; text-align: center;
+    display: none;
+}
+.loading-result img{
+    margin-top: -250px;
+}
+

@@ -9,7 +9,11 @@ class Filter extends Model {
     protected $fillable = ['en_name', 'ar_name', 'sort_order'];
 
     public function filter_items() {
-        return $this->hasMany(\App\Models\Filters_item::class);
+        return $this->hasMany(Filters_item::class);
+    }
+
+    public function checkFilterItems(array $filters) {
+        return $this->hasMany(Filters_item::class)->whereIn('id', $filters)->count() > 0 ? TRUE : FALSE;
     }
 
     public function delete() {

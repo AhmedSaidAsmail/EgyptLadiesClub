@@ -99,6 +99,6 @@
         <script type="text/javascript" src="{{asset('js/jquery-2.2.3.min.js')}}"></script>
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{asset('js/js.min.js')}}"></script>
-        @yield('scripts');
+        @yield('scripts')
     </body>
 </html>

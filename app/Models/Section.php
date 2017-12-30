@@ -26,9 +26,9 @@ class Section extends Model {
         return $this->belongsToMany(Brand::class, 'section_brands');
     }
 
-    public function delete() {
-        $this->categories()->delete();
-        return parent::delete();
+    public function checkBrand($brand_id) {
+        $brand = $this->belongsToMany(Brand::class, 'section_brands')->where('brand_id', '=', $brand_id)->first();
+        return (isset($brand)) ? true : false;
     }
-
+ 
 }

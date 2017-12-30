@@ -92,15 +92,15 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label>List Arrangement</label>
+                                            <label>Sort Order</label>
                                             <input  value="0" name="arrangement"  class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label>Symbol</label>
-                                            <input type="text" class="form-control" name="symbol" list="cars" />
-                                            <datalist id="cars">
+                                            <input type="text" class="form-control" name="symbol" list="symbols" />
+                                            <datalist id="symbols">
                                                 @foreach($sections->pluck('symbol')->toArray() as $symbol)
                                                 <option value="{{$symbol}}">{{$symbol}}</option>
                                                 @endforeach
@@ -177,18 +177,9 @@
                                     <td>{{$section->title}}</td>
                                     <td> {!! ($section->status)? '<i class="fa fa-circle text-green"></i>':'<i class="fa fa-circle text-gray"></i>' !!} </td>
                                     <td> {!! ($section->top_list)? '<i class="fa fa-circle text-green"></i>':'<i class="fa fa-circle text-gray"></i>' !!} </td>
-                                    <td><div class="btn-group">
-                                            <button type="button" class="btn btn-default">Action</button>
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
-                                            <div class="dropdown-menu list-group" >
-                                                <a href="{{route('sections.edit',['id'=>$section->id])}}" class="list-group-item">Change</a>
-                                                <form action="{{route('sections.destroy',['id'=>$section->id])}}" method="post">
-                                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <a href="#" class="deleteItem list-group-item" title="{{$section->name}}">Delete</a>
-                                                </form>
-                                            </div>
-                                        </div></td>
+                                    <td>
+                                        <a  href="{{route('sections.edit',['id'=>$section->id])}}" class="btn btn-info"><i class="fa fa-pencil"></i></a>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

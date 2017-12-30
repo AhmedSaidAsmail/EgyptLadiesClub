@@ -36,6 +36,13 @@ class Categorie extends Model {
     public function brands() {
         return $this->belongsToMany(Brand::class, 'category_brands');
     }
+    public function brandsExists(array $brands){
+        return $this->hasMany(Category_brand::class)->whereIn('brand_id',$brands)->count();
+    }
+
+    public function category_Brands(array $brands) {
+        return $this->hasMany(Category_brand::class)->WhereIn('brand_id', $brands)->get();
+    }
 
     public function categories_filters() {
         return $this->hasMany(\App\Models\Categories_filter::class);
@@ -47,6 +54,10 @@ class Categorie extends Model {
 
     public function items() {
         return $this->hasMany(\App\Models\Item::class);
+    }
+
+    public function countItems(array $items) {
+        return $this->hasMany(Item::class)->whereIn('id', $items)->count();
     }
 
     public function delete() {

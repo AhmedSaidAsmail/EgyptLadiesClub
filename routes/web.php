@@ -19,7 +19,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:web'], function() {
     Route::put('/Profile/changeDetails', ['uses' => 'Admin\ProfileController@changeDetails'])->name('admin.change.profile');
     Route::resource('/filter', 'Admin\FiltersController', ['except' => ['destroy']]);
     Route::delete('filter/destroy', ['uses' => 'Admin\FiltersController@destroySelected'])->name('filter.destroy.selected');
-    Route::resource('/sections', 'Admin\SectionsController');
+    Route::resource('/sections', 'Admin\SectionsController',['except'=>['create','show','destroy']]);
     Route::resource('categories', 'Admin\CategoriesController', ['except' => [ 'show', 'destroy']]);
     Route::resource('brands', 'Admin\BrandsController', ['except' => ['destroy', 'show', 'update', 'edit']]);
     Route::delete('brands/destroy', ['uses' => 'Admin\BrandsController@destroySelected'])->name('brand.destroy.selected');
@@ -36,5 +36,5 @@ Route::group(['prefix' => 'supplier', 'middleware' => 'auth:supplier'], function
 });
 // public Web
 Route::get('','FrontEnd\HomeController@home')->name('home');
-Route::get('c/{category}/{id}/{brand?}','FrontEnd\HomeController@categoryShow')->name('category.show');
+Route::get('c/{category}/{id}','FrontEnd\HomeController@categoryShow')->name('category.show');
 Route::get('s/{section}/{id}}','FrontEnd\HomeController@sectionShow')->name('section.show');
