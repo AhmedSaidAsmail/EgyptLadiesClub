@@ -60,7 +60,7 @@
                                 @foreach($categories as $category)
                                 <tr>
                                     <td>{{$category->section->en_name}}</td>
-                                    <td>{{App\Http\Controllers\Admin\CategoriesController::analyzeCatgoryName($category->id)}}</td>
+                                    <td>{{$category->analyzeName()}}</td>
                                     <td>{{$category->title}}</td>
                                     <td> @if($category->status) <i class="fa fa-circle text-green"></i> @else <i class="fa fa-circle text-gray"></i> @endif </td>
                                     <td> @if($category->recommended) <i class="fa fa-circle text-green"></i> @else <i class="fa fa-circle text-gray"></i> @endif </td>

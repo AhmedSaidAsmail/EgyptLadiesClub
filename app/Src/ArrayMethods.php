@@ -25,9 +25,16 @@ class ArrayMethods {
         return $columnListing;
     }
 
+    private static function setPrimrayKey(array &$fields, $primaryKey = null) {
+        if (!is_null($primaryKey)) {
+            $fields[] = $primaryKey;
+        }
+    }
+
     public static function colleactRecursiveArray(Request $request, $table, $path, $primaryKey = null) {
         $collection = [];
         $fields = static::getColumnListing($table);
+        self::setPrimrayKey($fields, $primaryKey);
         foreach ($fields as $field) {
             if (isset($request->$field) && !is_null($request->$field)) {
                 self::perpareCollectionData($collection, $field, $request, $path, $primaryKey);

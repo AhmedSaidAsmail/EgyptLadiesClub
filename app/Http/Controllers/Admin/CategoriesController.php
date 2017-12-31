@@ -4,38 +4,36 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Exception;
-use Illuminate\Http\UploadedFile;
-use UploadImage;
-use App\Models\Categorie;
+use App\Models\Category;
+use App\Models\Section;
 use App\Models\Filter;
-use App\Models\Categories_filter;
-use App\Src\ArrayMethods;
+use Exception;
 
 class CategoriesController extends Controller {
 
     protected $_path = '/images/categories/';
 
     public function index() {
-        $categories = Categorie::all();
+        $categories = Category::all();
         return view('Admin.Categories_all', ['activeCategory' => true, 'categories' => $categories]);
     }
 
     public function create() {
-        $categories = Categorie::all();
+        $categories = Category::all();
         $filters = Filter::all();
         return view('Admin.Categories_create', ['categories' => $categories, 'filters' => $filters, 'activeCategory' => true]);
     }
 
     public function store(Request $request) {
-        $this->itValidate($request);
+        $this->validatedData($request);
         $item = $request->all();
         (!is_null($request->parent_id)) ? $this->changeSctionParent($item, $request->parent_id) : "";
-        $links = ArrayMethods::colleactRecursiveArray($request, 'category_links', $this->_path);
+        $links = colleactRecursiveArray($request, 'category_links', $this->_path);
+        $item['img'] = uploadImage(['image' => $item['img'], 'path' => $this->_path]);
         try {
-            $item['img'] = $this->uploadImage($item['img']);
-            $category = Categorie::create($item);
+            $category = Category::create($item);
             $category->filters()->sync($item['filters']);
+            $category->brands()->sync($item['brnads']);
             $category->category_links()->createMany($links);
         } catch (Exception $e) {
             return redirect()->back()->with('failure', $e->getMessage());
@@ -44,44 +42,32 @@ class CategoriesController extends Controller {
     }
 
     public function edit($id) {
-        $category = Categorie::findOrFail($id);
-        return view('Admin.Categories_edit', ['category' => $category, 'activeCategory' => 1]);
+        $category = Category::findOrFail($id);
+        return view('Admin.Categories_edit', ['category' => $category, 'activeCategory' => true]);
     }
 
     public function update(Request $request, $id) {
-        $this->itValidate($request);
+        $this->validatedData($request);
         $data = $request->all();
-        $category = Categorie::findOrFail($id);
-        $exImg = $category->img;
+        $category = Category::findOrFail($id);
         $data['parent_id'] = isset($data['parent_id']) ? $data['parent_id'] : 0;
         if ($request->hasFile('img')) {
-            $file = Input::file('img');
-            $data['img'] = UploadFacades::Upload($file, $this->_path, 250);
+            $data['img'] = uploadImage(['image' => $data['img'], 'path' => $this->_path, 'exImage' => $category->img]);
         }
+        $links = colleactRecursiveArray($request, 'category_links', $this->_path, 'link_id');
         try {
-            $this->updateSection($request->section_id, $category->section_id, $id);
+            $this->updateSection($request->section_id, $category);
             $category->update($data);
             $category->filters()->sync($data['filters']);
-            (isset($exImg) && $request->hasFile('img')) ? UploadFacades::removeExImg($exImg, $this->_path) : '';
+            $category->brands()->sync($data['brnads']);
+            sync($category, 'category_links', $links);
         } catch (Exception $e) {
             return redirect()->back()->with('errorMsg', $e->getMessage());
         }
         return redirect()->route('categories.index')->with('success', $request->en_name . ' has been modified');
     }
 
-    public function destroy($id) {
-        $category = Categorie::findOrFail($id);
-        $exImg = $category->img;
-        try {
-            $category->delete();
-            (isset($exImg)) ? UploadFacades::removeExImg($exImg, $this->_path) : '';
-            return redirect()->route('categories.index')->with('success', 'Category No:' . $id . ' has been deleted');
-        } catch (Exception $e) {
-            return redirect()->back()->with('errorMsg', $e->getMessage());
-        }
-    }
-
-    private function itValidate(Request $request) {
+    private function validatedData(Request $request) {
         return $this->validate($request, [
                     'section_id' => 'required_without_all:parent_id|integer',
                     'parent_id' => 'required_without_all:section_id|integer',
@@ -95,78 +81,44 @@ class CategoriesController extends Controller {
         ]);
     }
 
-    private function uploadImage($value) {
-        if ($value instanceof UploadedFile) {
-            return UploadImage::Upload($value, $this->_path, 250);
-        }
-        throw new Exception('The intro image must not be null');
-    }
-
-//    private function createFilters($category_id, array $filters) {
-//        foreach ($filters as $filter) {
-//            Categories_filter::create(['categorie_id' => $category_id, 'filter_id' => $filter]);
-//        }
-//    }
-
-    public static function analyzeCatgoryName($id, array $name = null) {
-        $category = Categorie::find($id);
-        $return = [];
-        $return[] = $category->en_name;
-        if ($category->parent_id != 0) {
-            $return[] = self::analyzeCatgoryName($category->parent_id, $return);
-        }
-        return self::getName($return);
-    }
-
-    private static function getName(array $name) {
-        return implode(' > ', array_reverse($name));
-    }
-
-    public static function checkFilterExists($category, $filter_id) {
-        $filters = $category->filters;
-        foreach ($filters as $filter) {
-            if ($filter->id == $filter_id) {
-                return true;
-            }
-        }
-        return FALSE;
-    }
-
     private function changeSctionParent(&$data, $parent_id) {
-        $parent_category = Categorie::find($parent_id);
+        $parent_category = Category::find($parent_id);
         $section = $parent_category->section_id;
         $data["section_id"] = $section;
     }
 
-    private function updateSection($requestSection, $currentSection, $id) {
-        if ($this->checkSection($requestSection, $currentSection, $id)) {
-            $this->updateChilds($requestSection, $id);
+    private function updateSection($requestSection, Category $category) {
+        if ($this->checkSection($requestSection, $category)) {
+            $this->updateChilds($requestSection, $category);
         }
     }
 
-    private function hasChilds($id) {
-        $childs = Categorie::where('parent_id', $id)->count();
-        if ($childs > 0) {
+    private function checkSection($requestSection, Category $category) {
+        if ($requestSection !== $category->section_id && !is_null($category->childs)) {
             return true;
         }
         return false;
     }
 
-    private function checkSection($requestSection, $currentSection, $id) {
-        if ($requestSection !== $currentSection && $this->hasChilds($id)) {
-            return true;
-        }
-        return FALSE;
-    }
-
-    private function updateChilds($requestSection, $id) {
-        $childs = Categorie::where('parent_id', $id)->get();
-        foreach ($childs as $child) {
+    private function updateChilds($requestSection, Category $category) {
+        foreach ($category->childs as $child) {
             $child->update(['section_id' => $requestSection]);
-            if ($this->hasChilds($child->id)) {
-                $this->updateChilds($requestSection, $child->id);
+            if (!is_null($child->childs)) {
+                $this->updateChilds($requestSection, $child);
             }
         }
+    }
+
+    public function getSectionBrands(Request $request) {
+        $id = $request->id;
+        $brands = Section::find($id)->brands;
+        return view('Admin.Layouts.getBrands', ['brands' => $brands]);
+    }
+
+    public function getCategoryBrands(Request $request) {
+        $id = $request->id;
+        $brands = Category::find($id)->section->brands;
+        return view('Admin.Layouts.getBrands', ['brands' => $brands]);
     }
 
 }

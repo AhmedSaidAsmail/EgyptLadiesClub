@@ -42,7 +42,7 @@
                         @if(Session::has('failure'))
                         <div class="alert alert-danger alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            {{sesseion('failure')}}
+                            {{session('failure')}}
                         </div>
                         @elseif(count($errors)>0)
                         <div class="alert alert-danger alert-dismissible">
@@ -62,6 +62,7 @@
                             <ul class="nav nav-tabs">
                                 <li class="active"><a href="#general" data-toggle="tab">General</a></li>
                                 <li><a href="#filters" data-toggle="tab">Filters</a></li>
+                                <li><a href="#brands" data-toggle="tab">Brands</a></li>
                                 <li><a href="#data" data-toggle="tab">Data</a></li>
                                 <li><a href="#links" data-toggle="tab">Links</a></li>
                             </ul>
@@ -71,7 +72,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Section Name:</label>
-                                                <select class="form-control" name="section_id" >
+                                                <select class="form-control" name="section_id" data-link="{{route('section.brnads')}}">
                                                     <option value="">Select Section</option>
                                                     @foreach (App\Models\Section::all() as $section)
                                                     <option value="{{$section->id}}">{{$section->en_name}}</option>
@@ -83,10 +84,10 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Parent:</label>
-                                                <select class="form-control" name="parent_id" >
+                                                <select class="form-control" name="parent_id" data-link="{{route('category.brnads')}}">
                                                     <option value="">--- None ---</option>
                                                     @foreach ($categories as $category)
-                                                    <option value="{{$category->id}}">{{App\Http\Controllers\Admin\CategoriesController::analyzeCatgoryName($category->id)}}</option>
+                                                    <option value="{{$category->id}}">{{$category->analyzeName()}}</option>
                                                     @endforeach
 
                                                 </select>
@@ -119,10 +120,22 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Filters:</label>
-                                                <select class="form-control select2" name="filters[]" multiple="multiple" data-placeholder="Select a Filters" style="width: 100%;">
+                                                <select class="form-control select2" name="filters[]" multiple="multiple" data-placeholder="Select a Filters" style="width: 100%;" required>
                                                     @foreach($filters as $filter)
                                                     <option value="{{$filter->id}}">{{$filter->en_name}}</option>
                                                     @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="brands" class="tab-pane fade in">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Brands:</label>
+                                                <select id="brandsInput" class="form-control select2" name="brnads[]" multiple="multiple" data-placeholder="Select a Brands" style="width: 100%;" required>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -258,20 +271,35 @@ $(function () {
 });
 </script>
 <script>
+    function getBrands(url, value) {
+        $.ajax({
+            type: 'get',
+            url: url,
+            data: {id: value},
+            success: function (response) {
+                $("#brandsInput").html(response);
+
+            }
+        });
+    }
     $('select[name="section_id"]').change(function () {
         var inputvalue = $(this).val();
+        var url = $(this).attr('data-link');
         var parentinput = $(this).closest('form').find('select[name="parent_id"]');
         if (inputvalue) {
             parentinput.prop('disabled', true);
+            getBrands(url, inputvalue);
         } else {
             parentinput.prop('disabled', false);
         }
     });
     $('select[name="parent_id"]').change(function () {
         var inputvalue = $(this).val();
+        var url = $(this).attr('data-link');
         var sectioninput = $(this).closest('form').find('select[name="section_id"]');
         if (inputvalue) {
             sectioninput.prop('disabled', true);
+            getBrands(url, inputvalue);
         } else {
             sectioninput.prop('disabled', false);
         }

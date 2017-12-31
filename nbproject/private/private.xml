@@ -5,11 +5,13 @@
         <group>
             <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Models/Section.php</file>
             <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Http/Controllers/Admin/SectionsController.php</file>
-            <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Http/Controllers/Supplier/ItemController.php</file>
             <file>file:/D:/Work/Websites/EgyptLadiesClub/app/helpers.php</file>
             <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/Admin/Sections_edit.blade.php</file>
             <file>file:/D:/Work/Websites/EgyptLadiesClub/routes/web.php</file>
-            <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/Admin/Sections_all.blade.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Models/Category.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/app/Http/Controllers/Admin/CategoriesController.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/Admin/Categories_edit.blade.php</file>
+            <file>file:/D:/Work/Websites/EgyptLadiesClub/resources/views/Admin/Categories_create.blade.php</file>
         </group>
     </open-files>
 </project-private>

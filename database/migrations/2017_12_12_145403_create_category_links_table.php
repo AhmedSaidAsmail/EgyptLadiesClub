@@ -14,8 +14,8 @@ class CreateCategoryLinksTable extends Migration {
     public function up() {
         Schema::create('category_links', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('categorie_id')->unsigned();
-            $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->text('link');
             $table->text('link_img');
             $table->integer('link_sort_order')->default(0);

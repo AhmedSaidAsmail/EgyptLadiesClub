@@ -14,8 +14,8 @@ class CreateCategoryBrandsTable extends Migration {
     public function up() {
         Schema::create('category_brands', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('categorie_id')->unsigned();
-            $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('brand_id')->unsigned();
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
             $table->timestamps();

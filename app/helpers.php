@@ -5,6 +5,10 @@ use App\Src\CategoryChilds;
 use App\Src\CategoryAnalyzing\Category;
 use Illuminate\Http\UploadedFile;
 use App\Src\Facades\UploadFacades;
+use App\Src\ArrayMethods;
+use Illuminate\Http\Request;
+use App\Src\SyncData;
+use Illuminate\Database\Eloquent\Model;
 
 if (!function_exists('sectionChilds')) {
 
@@ -44,6 +48,20 @@ if (!function_exists('uploadImage')) {
             return UploadFacades::Upload($imgDetails['image'], $imgDetails['path'], $width, $exImage);
         }
         return $imgDetails['image'];
+    }
+
+}
+if (!function_exists('colleactRecursiveArray')) {
+
+    function colleactRecursiveArray(Request $request, $tableName, $path, $primaryKey = null) {
+        return ArrayMethods::colleactRecursiveArray($request, $tableName, $path, $primaryKey);
+    }
+
+}
+if (!function_exists('sync')) {
+
+    function sync(Model $model, $related, array $data) {
+        SyncData::sync($model, $related, $data);
     }
 
 }

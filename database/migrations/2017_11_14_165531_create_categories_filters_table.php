@@ -14,8 +14,8 @@ class CreateCategoriesFiltersTable extends Migration {
     public function up() {
         Schema::create('categories_filters', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('categorie_id')->unsigned();
-            $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('filter_id')->unsigned();
             $table->foreign('filter_id')->references('id')->on('filters')->onDelete('cascade');
             $table->timestamps();

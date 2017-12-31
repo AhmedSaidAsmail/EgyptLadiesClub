@@ -77,7 +77,7 @@
                         <li class="treeview{{(isset($activeCategory))?' active':''}}"> 
                             <a href="{{route('categories.index')}}"> <i class="fa fa-cubes" aria-hidden="true"></i> <span>Categories</span> 
                                 <span class="pull-right-container">
-                                    <span class="label label-primary pull-right">{{App\Models\Categorie::count()}}</span> </span> </a>
+                                    <span class="label label-primary pull-right">{{App\Models\Category::count()}}</span> </span> </a>
                         </li>
                         <li class="treeview"> <a href="#"> <i class="fa fa-cog"></i> <span>Setting</span></a>
                             <ul class="treeview-menu">
