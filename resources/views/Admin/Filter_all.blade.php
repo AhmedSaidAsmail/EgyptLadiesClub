@@ -48,7 +48,7 @@
                                         <td><input type="checkbox" name="filter_id[]" class="checkbox" value="{{$filter->id}}"></td>
                                         <td>{{$filter->en_name}}</td>
                                         <td>{{$filter->sort_order}}</td>
-                                        <td><a href="{{route('filter.show',['filter'=>$filter->id])}}" class="btn btn-info"><i class="fa fa-pencil"></i></a></td>
+                                        <td><a href="{{route('filter.edit',['filter'=>$filter->id])}}" class="btn btn-info"><i class="fa fa-pencil"></i></a></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

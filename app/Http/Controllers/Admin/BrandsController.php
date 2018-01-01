@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\UploadedFile;
 use Exception;
-use App\Src\Facades\UploadFacades;
 use App\Models\Brand;
 
 class BrandsController extends Controller {
@@ -23,9 +21,9 @@ class BrandsController extends Controller {
     }
 
     public function store(Request $request) {
-        $this->itValidate($request);
+        $this->ValidateData($request);
         $data = $request->all();
-        $data['img']=$this->uploadImage($data['img']);
+        $data['img'] = uploadImage(['image' => $data['img'], 'path' => $this->_path]);
         try {
             Brand::create($data);
         } catch (Exception $ex) {
@@ -34,50 +32,33 @@ class BrandsController extends Controller {
         return redirect()->route('brands.index')->with('success', ' Brand has been inserted');
     }
 
-    public function show($id) {
-        //
-    }
-
     public function edit($id) {
-        //
+        $brand = Brand::find($id);
+        return view('Admin.Brands_edit', ['brand' => $brand, 'activeBrands' => true]);
     }
 
     public function update(Request $request, $id) {
-        //
-    }
-
-    public function destroy($id) {
         $brand = Brand::find($id);
+        $this->ValidateData($request);
+        $data = $request->all();
+        if ($request->hasFile('img')) {
+            $data['img'] = uploadImage(['image' => $data['img'], 'path' => $this->_path]);
+        }
+
         try {
-            $brand->delete();
+            $brand->update($data);
         } catch (Exception $ex) {
             return redirect()->back()->with('errorMsg', $ex->getMessage());
         }
+        return redirect()->route('brands.index')->with('success', ' Brand has been updated');
     }
 
-    public function destroySelected(Request $request) {
-        $rows = $request->brand_id;
-        if (count($rows) <= 0) {
-            return redirect()->back()->with('errorMsg', 'No Brands selected');
-        }
-        foreach ($rows as $row) {
-            $this->destroy($row);
-        }
-        return redirect()->route('brands.index')->with('success', ' Brands has been deleted');
-    }
-
-    private function itValidate(Request $request) {
+    private function ValidateData(Request $request) {
         return $this->validate($request, [
                     'sort_order' => 'required|integer',
                     'ar_name' => 'required',
                     'en_name' => 'required',
         ]);
-    }
-        private function uploadImage($value) {
-        if ($value instanceof UploadedFile) {
-            return UploadFacades::Upload($value, $this->_path, 250);
-        }
-        return $value;
     }
 
 }

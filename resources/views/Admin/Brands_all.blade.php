@@ -48,7 +48,7 @@
                                         <td><input type="checkbox" name="brand_id[]" class="checkbox" value="{{$brand->id}}"></td>
                                         <td>{{$brand->en_name}}</td>
                                         <td>{{$brand->sort_order}}</td>
-                                        <td><a href="{{route('filter.show',['filter'=>$brand->id])}}" class="btn btn-info"><i class="fa fa-pencil"></i></a></td>
+                                        <td><a href="{{route('brands.edit',['id'=>$brand->id])}}" class="btn btn-info"><i class="fa fa-pencil"></i></a></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

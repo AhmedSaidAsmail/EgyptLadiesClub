@@ -87,9 +87,5 @@ class Category extends Model {
         return implode(' > ', array_reverse($name));
     }
 
-    public function delete() {
-        $this->categories_filters()->delete();
-        return parent::delete();
-    }
 
 }

@@ -17,13 +17,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:web'], function() {
     Route::get('', ['uses' => 'Admin\HomeController@index'])->name('admin.welcome');
     Route::get('/Profile/changeDetails', ['uses' => 'Admin\ProfileController@showProfileForm'])->name('admin.change.profile');
     Route::put('/Profile/changeDetails', ['uses' => 'Admin\ProfileController@changeDetails'])->name('admin.change.profile');
-    Route::resource('/filter', 'Admin\FiltersController', ['except' => ['destroy']]);
+    Route::resource('/filter', 'Admin\FiltersController', ['except' => ['destroy','show']]);
     Route::delete('filter/destroy', ['uses' => 'Admin\FiltersController@destroySelected'])->name('filter.destroy.selected');
     Route::resource('/sections', 'Admin\SectionsController',['except'=>['create','show','destroy']]);
     Route::resource('categories', 'Admin\CategoriesController', ['except' => [ 'show', 'destroy']]);
     Route::get('category/set/brands','Admin\CategoriesController@getCategoryBrands')->name('category.brnads');
     Route::get('section/set/brands','Admin\CategoriesController@getSectionBrands')->name('section.brnads');
-    Route::resource('brands', 'Admin\BrandsController', ['except' => ['destroy', 'show', 'update', 'edit']]);
+    Route::resource('brands', 'Admin\BrandsController', ['except' => ['destroy', 'show']]);
     Route::delete('brands/destroy', ['uses' => 'Admin\BrandsController@destroySelected'])->name('brand.destroy.selected');
     Route::resource('/suppliers', 'Admin\SuppliersController', ['except' => ['destroy', 'create', 'store', 'edit']]);
 });

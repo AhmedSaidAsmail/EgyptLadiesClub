@@ -16,9 +16,5 @@ class Filter extends Model {
         return $this->hasMany(Filters_item::class)->whereIn('id', $filters)->count() > 0 ? TRUE : FALSE;
     }
 
-    public function delete() {
-        $this->filter_items()->delete();
-        return parent::delete();
-    }
 
 }

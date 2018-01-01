@@ -6,6 +6,7 @@ use App\Src\CategoryAnalyzing\Category;
 use Illuminate\Http\UploadedFile;
 use App\Src\Facades\UploadFacades;
 use App\Src\ArrayMethods;
+use App\Src\CollectData;
 use Illuminate\Http\Request;
 use App\Src\SyncData;
 use Illuminate\Database\Eloquent\Model;
@@ -57,6 +58,12 @@ if (!function_exists('colleactRecursiveArray')) {
         return ArrayMethods::colleactRecursiveArray($request, $tableName, $path, $primaryKey);
     }
 
+}
+if(!function_exists('collectData')){
+    function collectData(array $details){
+        $collection=new CollectData($details);
+        return $collection->build();
+    }
 }
 if (!function_exists('sync')) {
 

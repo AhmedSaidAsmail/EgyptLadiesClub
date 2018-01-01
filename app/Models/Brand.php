@@ -11,7 +11,7 @@ class Brand extends Model {
         return $this->hasMany(Item::class);
     }
     public function categoryItems(array $catgegories){
-        return $this->hasMany(Item::class)->whereIn('categorie_id',$catgegories)->get();
+        return $this->hasMany(Item::class)->whereIn('category_id',$catgegories)->get();
     }
 
 }
