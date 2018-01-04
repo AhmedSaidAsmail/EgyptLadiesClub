@@ -12,7 +12,7 @@ class Item extends Model {
         return $this->belongsTo(\App\Supplier::class);
     }
 
-    public function categorie() {
+    public function category() {
         return $this->belongsTo(Category::class);
     }
 

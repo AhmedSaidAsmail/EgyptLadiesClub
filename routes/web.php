@@ -34,6 +34,7 @@ Route::group(['prefix' => 'supplier', 'middleware' => 'auth:supplier'], function
     })->name('spplier.welcome');
     Route::resource('suItems','Supplier\ItemController');
     Route::get('category/filters/get','Supplier\ItemController@getFilters')->name('item.get.filters');
+    Route::get('category/brands/get','Supplier\ItemController@getBrands')->name('item.get.brands');
     Route::resource('/reviews_supplier', 'Supplier\ReviewsController', ['only' => ['index', 'show']]);
 });
 // public Web

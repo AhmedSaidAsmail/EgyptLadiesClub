@@ -6,10 +6,12 @@ use App\Src\CategoryAnalyzing\Category;
 use Illuminate\Http\UploadedFile;
 use App\Src\Facades\UploadFacades;
 use App\Src\ArrayMethods;
-use App\Src\CollectData;
+//use App\Src\CollectData;
 use Illuminate\Http\Request;
 use App\Src\SyncData;
 use Illuminate\Database\Eloquent\Model;
+use App\Src\HierarchicalData\HierarchicalDataFactory;
+use App\Src\CollectData\CollectFactory;
 
 if (!function_exists('sectionChilds')) {
 
@@ -60,10 +62,20 @@ if (!function_exists('colleactRecursiveArray')) {
 
 }
 if(!function_exists('collectData')){
-    function collectData(array $details){
-        $collection=new CollectData($details);
-        return $collection->build();
+    function collectData(array $details,$type = 'multiple'){
+        $factory= new CollectFactory($details, $type);
+        return $factory->build()->collect();
+//        $collection=new CollectData($details);
+//        return $collection->build();
     }
+}
+if(!function_exists('hierarchicalData')){
+    function hierarchicalData($collection,$type){
+        $dataFactory= new HierarchicalDataFactory($collection);
+        return $dataFactory->returned($type)->returnData();
+    }
+    
+    
 }
 if (!function_exists('sync')) {
 

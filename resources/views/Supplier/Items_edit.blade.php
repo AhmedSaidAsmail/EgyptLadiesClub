@@ -22,11 +22,11 @@
                             </div>
                             <span class="reviews-summary-based">based on {{$item->reviews()->where('confirm','=',1)->count()}} reviews</span>
                         </div>
- 
+
                     </div>
                     <div style="margin-top:10px;">
 
-                            <a href="{{route('suItems.show',['item'=>$item->id])}}" class="btn btn-default"><i class="fa fa-comment"></i> See all activity reviews</a>   
+                        <a href="{{route('suItems.show',['item'=>$item->id])}}" class="btn btn-default"><i class="fa fa-comment"></i> See all activity reviews</a>   
                     </div>
                 </div>
             </div>
@@ -74,12 +74,12 @@
                                             <label>Category<span class="text-danger">*</span></label>  
                                         </div>
                                         <div class="col-md-10">
-                                            <select class="form-control" name="categorie_id" data-itemid="{{$item->id}}" data-placeholder="Select Category" data-link="{{route('item.get.filters')}}" required>
+                                            <select class="form-control" name="category_id" data-item="{{$item->id}}" data-placeholder="Select Category" data-link="{{route('item.get.filters')}}" required>
                                                 <option value="" disabled selected>Select Category</option>
                                                 @foreach($categories as $category)
-                                                <?php $categorySelected = ($category->id == $item->categorie_id) ? 'selected="selected"' : null; ?>
+                                                <?php $categorySelected = ($category->id == $item->category_id) ? 'selected="selected"' : null; ?>
                                                 <option value="{{$category->id}}" {{$categorySelected}}>
-                                                    {{App\Http\Controllers\Admin\CategoriesController::analyzeCatgoryName($category->id)}}
+                                                    {{$category->analyzeName()}}
                                                 </option>
                                                 @endforeach
                                             </select>  
@@ -90,11 +90,11 @@
                                             <label>Brand <span class="text-danger">*</span></label>  
                                         </div>
                                         <div class="col-md-10">
-                                            <select class="form-control" name="brand_id" data-placeholder="Select Category" required>
+                                            <select class="form-control" name="brand_id" data-link="{{route('item.get.brands')}}" data-placeholder="Select Category" required>
                                                 <option value="" disabled selected>Select Brand</option>
-                                                @foreach($brands as $brand)
-                                                <?php $brandSelected = ($brand->id == $item->brand_id) ? 'selected="selected"' : null; ?>
-                                                <option value="{{$brand->id}}" {{$brandSelected}}>{{$brand->en_name}}</option>
+                                                @foreach($item->category->brands as $brand)
+                                                <option value="{{$brand->id}}" {!! $brand->checkItem($item->id)?'selected="selected"':null!!}>
+                                                    {{$brand->en_name}}</option>
                                                 @endforeach
                                             </select>  
                                         </div>
@@ -303,18 +303,12 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Filters<span class="text-danger">*</span></label>
-                                                <select class="form-control select2" name="filters_item_id[]" multiple="multiple" data-placeholder="Select a Filters" style="width: 100%;" required>
-                                                    @foreach($item->categorie->filters as $filter)
+                                                <select class="form-control select2" name="filters_item_id[]" data-link="{{route('item.get.filters')}}" multiple="multiple" data-placeholder="Select a Filters" style="width: 100%;" required>
+                                                    @foreach($item->category->filters as $filter)
                                                     <option disabled="disabled">{{$filter->en_name}}</option>
                                                     @foreach($filter->filter_items as $filter_item)
-                                                    <?php
-                                                    if (\App\Http\Controllers\Supplier\ItemController::checkFilter($item->item_filters, $filter_item->id)):
-                                                        $selectedFilter = 'selected="selected"';
-                                                    else:
-                                                        $selectedFilter = null;
-                                                    endif;
-                                                    ?>
-                                                    <option value="{{$filter_item->id}}" {{$selectedFilter}}>{{$filter_item->filter_en_name}}</option>
+                                                    <option value="{{$filter_item->id}}"  {!! $filter_item->checkItem($item->id)?'selected="selected"':null!!}>
+                                                        {{$filter_item->filter_en_name}}</option>
                                                     @endforeach
                                                     @endforeach
                                                 </select>
@@ -327,7 +321,9 @@
                                                 <label>Related Products:</label>
                                                 <select class="form-control select2" name="related[]" multiple="multiple" data-placeholder="Related Products" style="width: 100%;">
                                                     @foreach($items as $related)
-                                                    <option value="{{$related->id}}">{{$related->details->en_name}}</option>
+                                                    @if(isset($item->details))
+                                                    <option value="{{$item->id}}">{{$item->details->en_name}}</option>
+                                                    @endif
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -344,22 +340,26 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php $image_index = 1; ?>
                                             @foreach($item->images as $item_image)
-                                            <tr>
-                                                <td><img src="{{asset('images/items/thumb/'.$item_image->item_image)}}"  class="img-thumbnail" style="width: 60px;"></td>
-                                                <td><input type="number" name="image_sort_order[]" min="0" value="{{$item_image->image_sort_order}}" class="form-control"></td>
+                                            <tr data-index="{{$image_index}}">
                                                 <td>
-                                                    <input type="hidden" value="{{$item_image->id}}" name="image_id[]">
-                                                   <a href="#" id="removeRow" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></a> 
+                                                    <img src="{{asset('images/items/thumb/'.$item_image->item_image)}}"  class="img-thumbnail" style="width: 60px;">
+                                                </td>
+                                                <td><input type="number" name="image_sort_order[{{$image_index}}]" min="0" value="{{$item_image->image_sort_order}}" class="form-control"></td>
+                                                <td>
+                                                    <input type="hidden" value="{{$item_image->id}}" name="image_id[{{$image_index}}]">
+                                                    <a href="#" id="removeRow" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></a> 
                                                 </td>
                                             </tr>
+                                            <?php $image_index++; ?>
                                             @endforeach
                                             <!-- insert row here -->
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th colspan="2"></th>
-                                                <th><a href="#imageTable" id="insertRow" class="btn btn-primary btn-sm second-insert"><i class="fa fa-plus"></i></a></th>
+                                                <th><a href="#" id="insertRowImage" class="btn btn-primary btn-sm second-insert"><i class="fa fa-plus"></i></a></th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -469,20 +469,25 @@ $(function () {
 
 });
 $(function () {
-    $('select[name="categorie_id"').change(function () {
+    function getElements(inputvalue, destintionoption, item_id) {
+        var link = destintionoption.attr('data-link');
+        $.ajax({
+            type: 'get',
+            url: link,
+            data: {id: inputvalue, item_id: item_id},
+            success: function (response) {
+                destintionoption.html(response);
+            }
+        });
+    }
+    $('select[name="category_id"').change(function () {
         var inputvalue = $(this).val();
-        var link = $(this).attr('data-link');
-        var item_id=$(this).attr('data-itemid');
-        var destintionoption = $('select[name="filters_item_id[]"]');
+        var item_id = $(this).attr('data-item');
+        var destintionFilters = $('select[name="filters_item_id[]"]');
+        var destintionBrands = $('select[name="brand_id"]');
         if (inputvalue.length) {
-            $.ajax({
-                type: 'get',
-                url: link,
-                data: {id: inputvalue,item_id:item_id},
-                success: function (response) {
-                    destintionoption.html(response);
-                }
-            });
+            getElements(inputvalue, destintionFilters, item_id);
+            getElements(inputvalue, destintionBrands, item_id);
         }
     });
     $('a#insertRow').click(function (event) {
@@ -490,7 +495,9 @@ $(function () {
         var targetTable = $(this).attr('href');
         var targetRow = $('table' + targetTable).find('tr').html();
         var destinationArea = $(this).closest('table').find('tbody');
-        destinationArea.append('<tr>' + targetRow + '</tr>');
+        var index = parseInt(destinationArea.find('tr:last').attr('data-index')) + 1;
+        alert(index);
+        destinationArea.append('<tr data-index="' + index + '">' + targetRow + '</tr>');
         $('#datepicker2').datepicker({
             format: "dd-mm-yyyy",
             todayBtn: "linked",
@@ -509,6 +516,22 @@ $(function () {
             var linkRow = $(this).closest('tr');
             linkRow.empty();
         });
+    });
+    $("a#insertRowImage").click(function (event) {
+        event.preventDefault();
+        var destinationArea = $(this).closest('table').find('tbody');
+        var index = parseInt(destinationArea.find('tr:last').attr('data-index')) + 1;
+        destinationArea.append('<tr data-index="' + index + '">\n\
+<td><input type="file" class="form-control item_image" name="item_image[' + index + ']"></td>\n\
+<td><input type="number" class="form-control image_sort_order" name="image_sort_order[' + index + ']" min="0"></td>\n\
+<td><a href="#" id="removeRow" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></a></td>\n\
+</tr>');
+        $("a#removeRow").click(function (event) {
+            event.preventDefault();
+            var linkRow = $(this).closest('tr');
+            linkRow.empty();
+        });
+
     });
     $("a#removeRow").click(function (event) {
         event.preventDefault();

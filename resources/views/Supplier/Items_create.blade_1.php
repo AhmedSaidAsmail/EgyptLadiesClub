@@ -51,10 +51,10 @@
                                             <label>Category<span class="text-danger">*</span></label>  
                                         </div>
                                         <div class="col-md-10">
-                                            <select class="form-control" name="category_id" data-placeholder="Select Category" required>
+                                            <select class="form-control" name="category_id" data-placeholder="Select Category" data-link="{{route('item.get.filters')}}" required>
                                                 <option value="" disabled selected>Select Category</option>
                                                 @foreach($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->analyzeName()}}</option>
+                                                <option value="{{$category->id}}">{{App\Http\Controllers\Admin\CategoriesController::analyzeCatgoryName($category->id)}}</option>
                                                 @endforeach
                                             </select>  
                                         </div>
@@ -64,9 +64,11 @@
                                             <label>Brand <span class="text-danger">*</span></label>  
                                         </div>
                                         <div class="col-md-10">
-                                            <select class="form-control" data-link="{{route('item.get.brands')}}" name="brand_id" data-placeholder="Select Category" required>
+                                            <select class="form-control" name="brand_id" data-placeholder="Select Category" required>
                                                 <option value="" disabled selected>Select Brand</option>
-
+                                                @foreach($brands as $brand)
+                                                <option value="{{$brand->id}}">{{$brand->en_name}}</option>
+                                                @endforeach
                                             </select>  
                                         </div>
                                     </div>
@@ -237,7 +239,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Filters<span class="text-danger">*</span></label>
-                                                <select class="form-control select2" name="filters_item_id[]" data-link="{{route('item.get.filters')}}" multiple="multiple" data-placeholder="Select a Filters" style="width: 100%;" required>
+                                                <select class="form-control select2" name="filters_item_id[]" multiple="multiple" data-placeholder="Select a Filters" style="width: 100%;" required>
 
                                                 </select>
                                             </div>
@@ -249,9 +251,7 @@
                                                 <label>Related Products:</label>
                                                 <select class="form-control select2" name="related[]" multiple="multiple" data-placeholder="Related Products" style="width: 100%;">
                                                     @foreach($items as $item)
-                                                    @if(isset($item->details))
                                                     <option value="{{$item->id}}">{{$item->details->en_name}}</option>
-                                                    @endif
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -383,24 +383,19 @@ $(function () {
 
 });
 $(function () {
-    function getElements(inputvalue,destintionoption) {
-        var link = destintionoption.attr('data-link');
-        $.ajax({
-            type: 'get',
-            url: link,
-            data: {id: inputvalue},
-            success: function (response) {
-                    destintionoption.html(response);
-            }
-        });
-    }
     $('select[name="category_id"').change(function () {
         var inputvalue = $(this).val();
-        var destintionFilters = $('select[name="filters_item_id[]"]');
-        var destintionBrands = $('select[name="brand_id"]');
+        var link = $(this).attr('data-link');
+        var destintionoption = $('select[name="filters_item_id[]"]');
         if (inputvalue.length) {
-            getElements(inputvalue,destintionFilters);
-            getElements(inputvalue,destintionBrands);
+            $.ajax({
+                type: 'get',
+                url: link,
+                data: {id: inputvalue},
+                success: function (response) {
+                    destintionoption.html(response);
+                }
+            });
         }
     });
     $('a#insertRow').click(function (event) {
@@ -430,6 +425,7 @@ $(function () {
     });
     $("a#remove_wysihtml5").click(function (event) {
         event.preventDefault();
+
         $("div#textarea").each(function () {
             var input = $(this).find('textarea');
             var inputName = input.attr('name');

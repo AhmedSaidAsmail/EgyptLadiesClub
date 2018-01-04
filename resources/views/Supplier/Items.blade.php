@@ -88,8 +88,9 @@
                             <tbody>
                                 @foreach($items as $item)
                                 <tr>
-                                    <td class="img-td"><img src="{{asset('images/items/thumb/'.$item->img)}}" class="img-thumbnail" style="width: 60px;"></td>
-                                    <td>{{$item->details->en_name}}</td>
+                                    <td class="img-td">
+                                        <img src="{{asset('images/items/thumb/'.$item->img)}}" class="img-thumbnail" style="width: 60px;"></td>
+                                    <td>{!! isset($item->details)?$item->details->en_name:'----------' !!}</td>
                                     <td>{{$item->model}}</td>
                                     <td>{{$item->price}}</td>
                                     <?php $class = ($item->quantity > $item->min_quantity) ? "success" : "danger"; ?>

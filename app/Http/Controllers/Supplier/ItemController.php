@@ -4,15 +4,9 @@ namespace App\Http\Controllers\Supplier;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
-use App\Src\Facades\UploadFacades;
-use Illuminate\Http\UploadedFile;
-use App\SyncData;
 use App\Models\Item;
-use App\Models\Categorie;
+use App\Models\Category;
 use App\Models\Brand;
-use App\Http\HierarchicalData;
 use Auth;
 use Exception;
 
@@ -29,28 +23,28 @@ class ItemController extends Controller {
     }
 
     public function create() {
-        $categories = Categorie::all();
-        $categoriesArray = ( HierarchicalData::flatten(HierarchicalData::makeTree($categories)));
+        $categories = Category::all();
+        $categories = hierarchicalData($categories, 'flatten');
         $brands = Brand::all();
         $items = Item::all();
-        return view('Supplier.Items_create', ['categories' => $categoriesArray,
+        return view('Supplier.Items_create', ['categories' => $categories,
             'brands' => $brands,
             'items' => $items,
             'activeItems' => true]);
     }
 
     public function store(Request $request) {
-        $this->itsValidate($request);
+        $this->validateData($request);
         $data = $request->all();
-        $data['img'] = $this->uploadImage($data['img']);
-        $discountsArray = $this->colleactRecursiveArray($request, ['dis_price', 'dis_quantity', 'date_start', 'date_end']);
-        $imgArray = $this->colleactRecursiveArray($request, ['item_image', 'image_sort_order']);
+        $data['img'] = uploadImage(['image' => $data['img'], 'path' => $this->_path]);
+        $discountData = collectData(['request' => $request, 'table' => 'discounts', 'path' => $this->_path]);
+        $imagesData = collectData(['request' => $request, 'table' => 'items_images', 'path' => $this->_path]);
         try {
             $item = Item::create($data);
             $item->details()->create($data);
             $item->filters()->sync($data['filters_item_id']);
-            $item->discounts()->createMany($discountsArray);
-            $item->images()->createMany($imgArray);
+            $item->discounts()->createMany($discountData);
+            $item->images()->createMany($imagesData);
         } catch (Exception $ex) {
             return redirect()->back()->with('failure', $ex->getMessage());
         }
@@ -64,13 +58,13 @@ class ItemController extends Controller {
     public function edit($id) {
         try {
             $item = $this->getItem($id);
-            $categories = Categorie::all();
-            $categoriesArray = ( HierarchicalData::flatten(HierarchicalData::makeTree($categories)));
+            $categories = Category::all();
+            $categories = hierarchicalData($categories, 'flatten');
             $brands = Brand::all();
             $items = Item::all();
             return view('Supplier.Items_edit', [
                 'item' => $item,
-                'categories' => $categoriesArray,
+                'categories' => $categories,
                 'brands' => $brands,
                 'items' => $items,
                 'activeItems' => true]);
@@ -80,50 +74,18 @@ class ItemController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $this->itsValidate($request);
+        $this->validateData($request);
         $data = $request->all();
         $item = Item::find($id);
+        $discountData = collectData(['request' => $request, 'table' => 'discounts', 'primaryKey' => 'discount_id']);
+        $imagesData = collectData(['request' => $request, 'table' => 'items_images', 'path' => $this->_path, 'primaryKey' => 'image_id']);
+        $detailsData= collectData(['request' => $request,'table' => 'items_details'],'flatten');
         $item->update($data);
-        $item->details()->update($this->collectArray($request, 'items_details'));
+        $item->details()->update($detailsData);
         $item->filters()->sync($data['filters_item_id']);
-        $discountsArray = $this->colleactRecursiveArray($request, ['discount_id', 'dis_price', 'dis_quantity', 'date_start', 'date_end'], 'discount_id');
-        $imgArray = $this->colleactRecursiveArray($request, ['image_id', 'item_image', 'image_sort_order'], 'image_id');
-        SyncData::sync($item->discounts, $item->discounts(), 'discounts', $discountsArray);
-        SyncData::sync($item->images, $item->images(), 'items_images', $imgArray);
+        sync($item, 'discounts', $discountData);
+        sync($item, 'images', $imagesData);
         return redirect()->route('suItems.index')->with('success', 'The product has been updated');
-    }
-
-    public function destroy($id) {
-        //
-    }
-
-    protected function collectArray(Request $request, $table) {
-        $collection = [];
-        $fields = DB::getSchemaBuilder()->getColumnListing($table);
-        foreach ($fields as $field) {
-            if (isset($request->$field) && !is_null($request->$field)) {
-                $collection[$field] = $request->$field;
-            }
-        }
-        return $collection;
-    }
-
-    protected function colleactRecursiveArray(Request $request, array $fields, $primaryKey = null) {
-        $collection = [];
-        foreach ($fields as $field) {
-            if (isset($request->$field) && !is_null($request->$field)) {
-                $this->perpareCollectionData($collection, $field, $request, $primaryKey);
-            }
-        }
-        return $collection;
-    }
-
-    protected function perpareCollectionData(array &$collection, $field, Request $request, $primaryKey = null) {
-        foreach ($request->$field as $key => $fieldData) {
-            $fixField = (!is_null($primaryKey) && $primaryKey == $field) ? "id" : $field;
-            $data = $this->uploadImage($fieldData);
-            $collection[$key][$fixField] = $data;
-        }
     }
 
     protected function getItem($id) {
@@ -136,28 +98,23 @@ class ItemController extends Controller {
 
     public function getFilters(Request $request) {
         $id = $request->id;
-        $category = Categorie::find($id);
+        $category = Category::find($id);
         $filters = $category->filters;
-        $item_filters = null;
-        if (isset($request->item_id)) {
-            $item = Item::find($request->item_id);
-            $item_filters = $item->item_filters;
-        }
-        return view('Supplier.Layouts.filters_get', ['filters' => $filters, 'item_filters' => $item_filters]);
+        $item_id = isset($request->item_id) ? isset($request->item_id) : null;
+        return view('Supplier.Layouts.filters_get', ['filters' => $filters, 'item_id' => $item_id]);
     }
 
-    public static function checkFilter(Collection $item_filters, $filter_id) {
-        foreach ($item_filters as $item_filter) {
-            if ($item_filter->filters_item_id == $filter_id) {
-                return TRUE;
-            }
-        }
-        return FALSE;
+    public function getBrands(Request $request) {
+        $id = $request->id;
+        $category = Category::find($id);
+        $brands = $category->brands;
+        $item_id = isset($request->item_id) ? isset($request->item_id) : null;
+        return view('Supplier.Layouts.brands_get', ['brands' => $brands, 'item_id' => $item_id]);
     }
 
-    public function itsValidate(Request $request) {
+    private function validateData(Request $request) {
         return $this->validate($request, [
-                    'categorie_id' => 'required|integer',
+                    'category_id' => 'required|integer',
                     'brand_id' => 'required|integer',
                     'model' => 'required',
                     'img' => 'image',
@@ -180,13 +137,6 @@ class ItemController extends Controller {
                     'date_start.*' => 'nullable|date',
                     'date_end.*' => 'nullable|date',
         ]);
-    }
-
-    private function uploadImage($value) {
-        if ($value instanceof UploadedFile) {
-            return UploadFacades::Upload($value, $this->_path, 250);
-        }
-        return $value;
     }
 
 }

@@ -14,6 +14,10 @@ class Filters_item extends Model {
         public function countItems(array $items){
         return $this->hasMany(Items_filter::class)->whereIn('item_id', $items)->count();
     }
+    public function checkItem($item_id){
+        $check= $this->hasMany(Items_filter::class)->where('item_id',$item_id)->first();
+        return isset($check)?true:false;
+    }
 
 //    public function getFilteredItems(array $filters) {
 //        if(isset($filters['brands'])){

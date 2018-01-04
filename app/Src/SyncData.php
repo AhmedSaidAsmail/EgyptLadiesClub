@@ -15,17 +15,22 @@ class SyncData {
     protected $table;
     protected $data;
     protected $columnListing;
+    private $path = null;
     protected $current = [];
     protected $updated = [];
     protected $created = [];
     protected $deleted = [];
 
-    public function __construct(Model $model, $related, array $data) {
+    const extensions = ['png', 'jpg', 'jpeg', 'gif'];
+
+    public function __construct(Model $model, $related, array $data, $path = null) {
         $this->setData($data)
                 ->setCollection($model, $related)
                 ->setHasMany($model, $related)
-                ->setColumnListing();
+                ->setColumnListing()
+                ->setPath($path);
     }
+
     private function setData(array $data) {
         $this->data = $data;
         return $this;
@@ -36,7 +41,7 @@ class SyncData {
             $this->collection = $model->$related;
         }
         else {
-            throw new Exception('this is not a valid collection');
+            throw new Exception($related.' this is not a valid collection');
         }
         return $this;
     }
@@ -53,6 +58,13 @@ class SyncData {
 
     private function setColumnListing() {
         $this->columnListing = $this->hasMany->getRElated()->getFillable();
+        return $this;
+    }
+
+    private function setPath($path = null) {
+        if (!is_null($path)) {
+            $this->path = $path;
+        }
     }
 
     public static function getInstance(Model $model, $related, array $data) {
@@ -93,6 +105,7 @@ class SyncData {
     public function syncUpdated() {
         foreach ($this->updated as $update) {
             $currentRow = $this->collection->find($update['id']);
+            $this->checkImage($update, $currentRow);
             $currentRow->update($update);
         }
         return $this;
@@ -110,6 +123,20 @@ class SyncData {
             $currentRow = $this->collection->find($deleted);
             $currentRow->delete();
         }
+    }
+
+    private function checkImage(array $data, $currentRow) {
+        foreach ($data as $key => $value) {
+            $pathInfo=pathinfo($value);
+            if (isset($pathInfo['extension']) && in_array(strtolower($pathInfo['extension']), self::extensions) && !is_null($this->path)) {
+                $this->removeImg($currentRow->$key, $this->path);
+            }
+        }
+    }
+
+    private function removeImg($image, $path) {
+        (file_exists($path . $image)) ? unlink($path . $image) : '';
+        (file_exists($path . 'thumb/' . $image)) ? unlink($path . 'thumb/' . $image) : '';
     }
 
 }

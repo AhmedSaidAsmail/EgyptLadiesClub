@@ -38,9 +38,9 @@ Feature:
     And I click the Add New Product link
     And I Fill General Fields:
         |type          |name                |data                 |
-        |select        |categorie_id        |3                    |
-        |select        |brand_id            |3                    |
+        |select        |category_id         |usb connector        |
         |text          |model               |testModel            |
+        |select        |brand_id            |HP                   |
         |file          |img                 |null                 |
         |text          |quantity            |25                   |
         |text          |min_quantity        |10                   |
