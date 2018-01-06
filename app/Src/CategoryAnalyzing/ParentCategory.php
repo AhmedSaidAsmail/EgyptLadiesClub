@@ -2,7 +2,7 @@
 
 namespace App\Src\CategoryAnalyzing;
 
-use App\Models\Categorie as CategoryModel;
+use App\Models\Category as CategoryModel;
 use Illuminate\Http\Request;
 
 class ParentCategory extends AbstractCategory implements CategoryList {
@@ -78,7 +78,7 @@ class ParentCategory extends AbstractCategory implements CategoryList {
             $this->items_id[] = $item->id;
             $this->items[$item->id]['sort_order'] = $item->sort_order;
             $this->items[$item->id]['item'] = $item;
-            $this->items[$item->id]['category_id'] = $item->categorie->id;
+            $this->items[$item->id]['category_id'] = $item->category->id;
             $this->items[$item->id]['brand_id'] = $item->brand_id;
             $this->items[$item->id]['price'] = $item->price;
         }

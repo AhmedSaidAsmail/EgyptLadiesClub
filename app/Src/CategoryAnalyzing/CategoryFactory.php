@@ -2,12 +2,12 @@
 
 namespace App\Src\CategoryAnalyzing;
 
-use App\Models\Categorie;
+use App\Models\Category as CategoryModel;
 use Illuminate\Http\Request;
 
 
 
 interface CategoryFactory {
 
-    public function buildCategory(Categorie $category, Request $request);
+    public function buildCategory(CategoryModel $category, Request $request);
 }

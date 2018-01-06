@@ -61,21 +61,25 @@ if (!function_exists('colleactRecursiveArray')) {
     }
 
 }
-if(!function_exists('collectData')){
-    function collectData(array $details,$type = 'multiple'){
-        $factory= new CollectFactory($details, $type);
+if (!function_exists('collectData')) {
+
+    function collectData(array $details, $type = 'multiple') {
+        $factory = new CollectFactory($details, $type);
         return $factory->build()->collect();
 //        $collection=new CollectData($details);
 //        return $collection->build();
     }
+
 }
-if(!function_exists('hierarchicalData')){
-    function hierarchicalData($collection,$type){
-        $dataFactory= new HierarchicalDataFactory($collection);
-        return $dataFactory->returned($type)->returnData();
+if (!function_exists('hierarchicalData')) {
+
+    function hierarchicalData($collection, $type) {
+        if (count($collection) > 0) {
+            $dataFactory = new HierarchicalDataFactory($collection);
+            return $dataFactory->returned($type)->returnData();
+        }
     }
-    
-    
+
 }
 if (!function_exists('sync')) {
 

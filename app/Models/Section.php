@@ -19,7 +19,7 @@ class Section extends Model {
         'description'];
 
     public function categories() {
-        return $this->hasMany(Categorie::class);
+        return $this->hasMany(Category::class);
     }
 
     public function brands() {

@@ -5,17 +5,18 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Section;
-use App\Models\Categorie;
+use App\Models\Category;
 
 class HomeController extends Controller {
 
     public function home() {
         $sections = Section::all();
-        return view('Public.home', ['sections' => $sections]);
+        $topCategories= Category::where('status',1)->where('recommended',1)->orderBy('arrangement')->get();
+        return view('Public.home', ['sections' => $sections,'topCategories'=>$topCategories]);
     }
 
     public function categoryShow(Request $request, $categoryName, $id) {
-        $targetCategory = Categorie::find($id);
+        $targetCategory = Category::find($id);
         $catgoryClass = analyzeCategory($targetCategory, $request);
         $data = ['category_name' => $categoryName,
             'category' => $targetCategory,

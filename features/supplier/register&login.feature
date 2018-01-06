@@ -75,10 +75,10 @@ Feature:
     And I Fill Links Fields:
         |type          |name                |data                 |
         |multiselect   |filters_item_id[]   |3,4,5                |
-        |multiselect2   |related[]           |                     |
+        |multiselect2   |related[]          |                     |
     And I click the Images link
     And I Fill Images Fields:
-        |type          |name                |data                      |
+        |type               |name                |data                 |
         |multifile          |item_image          |null                 |
         |multitext          |image_sort_order    |1                    |
     And I press button with  id "create_item_done"

@@ -22,18 +22,66 @@
 @section('container')
 <div class="basicsorts-ref">
     <h1>Explore Egypt Ladies Club <a href="">Shop all departments</a></h1>
-    @foreach($topCategories as $topCategory)
-    <a href="{{ route('category.show',['category'=>$topCategory->en_name,'id'=>$topCategory->id])}}">
+    <a href="">
         <div class="basicsorts-item">
             <div class="basicsorts-item-img">
-                <img src="{{asset('images/categories/thumb/'.$topCategory->img)}}" alt="{{$topCategory->title}}">
+                <img src="images/basicsorts/hp-spectre-x360-13-inch-2017-02.jpg" alt="">
             </div>
             <div class="basicsorts-item-label">
-                {{$topCategory->en_name}}
+                Laptops & Elec
             </div>
         </div>  
     </a>
-    @endforeach
+    <a href="">
+        <div class="basicsorts-item">
+            <div class="basicsorts-item-img">
+                <img src="images/basicsorts/xiaomi_mi_a1_homescreen_gadgets360_073317_163351_2886_1504837823301.jpg" alt="">
+            </div>
+            <div class="basicsorts-item-label">
+                Mobiles
+            </div>
+        </div>  
+    </a>                       
+    <a href="">
+        <div class="basicsorts-item">
+            <div class="basicsorts-item-img">
+                <img src="images/basicsorts/furniture-gallery-london.jpg" alt="">
+            </div>
+            <div class="basicsorts-item-label">
+                Furniture
+            </div>
+        </div>  
+    </a>                       
+    <a href="">
+        <div class="basicsorts-item">
+            <div class="basicsorts-item-img">
+                <img src="images/basicsorts/BEAUTY-TOOLS.jpg" alt="">
+            </div>
+            <div class="basicsorts-item-label">
+                Beauty
+            </div>
+        </div>  
+    </a>                       
+    <a href="">
+        <div class="basicsorts-item">
+            <div class="basicsorts-item-img">
+                <img src="images/basicsorts/hp-spectre-x360-13-inch-2017-02.jpg" alt="">
+            </div>
+            <div class="basicsorts-item-label">
+                Laptops & Elec
+            </div>
+        </div>  
+    </a>                       
+    <a href="">
+        <div class="basicsorts-item">
+            <div class="basicsorts-item-img">
+                <img src="images/basicsorts/hp-spectre-x360-13-inch-2017-02.jpg" alt="">
+            </div>
+            <div class="basicsorts-item-label">
+                Laptops & Elec
+            </div>
+        </div>  
+    </a>
 </div>
 <div class="products-container">
     <h2>Popular Products </h2>
@@ -313,7 +361,12 @@
         </div>
         <div class="col-md-2 welcome-sorts-ref">
             <h3>Discover Our {{$section->en_name}}</h3>
-            {{hierarchicalData($section->categories,'printed')}}
+            <ul>
+                @foreach($section->categories as $catgory)
+                {{hierarchicalData($catgory,'printed')}}
+                @endforeach
+            </ul>
+
         </div>
         <div class="col-md-4">
             <div class="welcome-sort-img img-container">
@@ -324,7 +377,7 @@
             @foreach (array_chunk(sectionChilds($section), 2) as $chunk)
             <div class="row">
                 @foreach($chunk as $categoryItem)
-                <?php $link = isset($categoryItem['link']) ? $categoryItem['link'] : null; ?>
+                <?php $link=isset($categoryItem['link'])?$categoryItem['link']:null; ?>
                 <a href="{{
                     route('category.show',['category'=>$categoryItem['en_name'],'id'=>$categoryItem['id']]).$link
                     

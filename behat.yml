@@ -8,7 +8,7 @@ default:
             contexts: [SupplierContext]
         admin_feature:
             paths: [%paths.base%/features/admin]
-            contexts: [AdminContext]
+            contexts: [AdminLogin,AdminFilters,AdminContext]
     extensions:
         Cjm\Behat\StepThroughExtension: ~
         Behat\MinkExtension:

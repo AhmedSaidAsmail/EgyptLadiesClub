@@ -40,7 +40,7 @@ class FiltersController extends Controller {
         $this->validateData($request);
         $data = $request->all();
         $filter = Filter::find($id);
-        $filter_items = collectData(['request' => $request, 'table' => 'filters_items', 'primaryKay' => 'filter_item_id']);
+        $filter_items = collectData(['request' => $request, 'table' => 'filters_items', 'primaryKey' => 'filter_item_id']);
         try {
             $filter->update($data);
             sync($filter, 'filter_items', $filter_items);

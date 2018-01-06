@@ -79,7 +79,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="2"></td>
-                                                <td><a class="btn btn-info btn-sm" id="add-row"><i class="fa fa-plus"></i></a></td>
+                                                <td><a href="#" class="btn btn-info btn-sm" id="add-row"><i class="fa fa-plus"></i></a></td>
                                             </tr>  
                                         </tfoot>                                        
                                     </table>

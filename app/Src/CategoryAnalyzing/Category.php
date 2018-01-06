@@ -2,18 +2,18 @@
 
 namespace App\Src\CategoryAnalyzing;
 
-use App\Models\Categorie;
+use App\Models\Category as CategoryModel;
 use Illuminate\Http\Request;
 
 class Category implements CategoryFactory {
 
     private $class;
 
-    public function __construct(Categorie $category, Request $request) {
+    public function __construct(CategoryModel $category, Request $request) {
         $this->buildCategory($category, $request);
     }
 
-    public function buildCategory(Categorie $category, Request $request) {
+    public function buildCategory(CategoryModel $category, Request $request) {
         $data = $request->all();
         $this->setClass(new ParentCategory($category,$request));
         if (isset($data['categories'])) {

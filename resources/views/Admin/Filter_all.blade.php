@@ -4,7 +4,7 @@
     <section class="content-header">
         <h1> Filters <small><a href="">Home</a> / <a href="">Filters</a></small> </h1>
         <ul class="right-links list-inline">
-            <li><a href="{{route('filter.create')}}" class="btn btn-info"><i class="fa fa-plus"></i></a></li>
+            <li><a href="{{route('filter.create')}}" class="btn btn-info" id="add_new"><i class="fa fa-plus"></i></a></li>
             <li><button form="filters_delete" class="btn btn-danger"><i class="fa fa-trash"></i></button></li>
         </ul>
     </section>

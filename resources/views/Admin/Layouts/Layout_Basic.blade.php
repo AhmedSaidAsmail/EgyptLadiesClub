@@ -22,7 +22,7 @@
                         <ul class="nav navbar-nav">
                             <li class="dropdown user user-menu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="{{asset('images/admin/administrator.png')}}" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">{{Auth::guard('web')->user()->email}} </span> </a>
+                                    <span class="hidden-xs" id="welcome_user">{{Auth::guard('web')->user()->email}} </span> </a>
                                 <ul class="dropdown-menu">
                                     <li class="user-header"> <img src="{{asset('images/admin/administrator.png')}}" class="img-circle" alt="User Image">
                                         <p> {{Auth::guard('web')->user()->email}} <small>Member since {{Auth::guard('web')->user()->created_at}}</small> </p>

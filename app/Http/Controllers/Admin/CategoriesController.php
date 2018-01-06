@@ -28,7 +28,7 @@ class CategoriesController extends Controller {
         $this->validatedData($request);
         $item = $request->all();
         (!is_null($request->parent_id)) ? $this->changeSctionParent($item, $request->parent_id) : "";
-        $links = colleactRecursiveArray($request, 'category_links', $this->_path);
+        $links = collectData(['request' => $request, 'table' => 'category_links', 'path' => $this->_path]);
         $item['img'] = uploadImage(['image' => $item['img'], 'path' => $this->_path]);
         try {
             $category = Category::create($item);
@@ -54,7 +54,7 @@ class CategoriesController extends Controller {
         if ($request->hasFile('img')) {
             $data['img'] = uploadImage(['image' => $data['img'], 'path' => $this->_path, 'exImage' => $category->img]);
         }
-        $links = colleactRecursiveArray($request, 'category_links', $this->_path, 'link_id');
+        $links = collectData(['request' => $request, 'table' => 'category_links', 'path' => $this->_path,'primaryKey' => 'link_id']);
         try {
             $this->updateSection($request->section_id, $category);
             $category->update($data);

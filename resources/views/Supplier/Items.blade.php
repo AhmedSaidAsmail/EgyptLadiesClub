@@ -30,7 +30,7 @@
                         @if(session('success'))
                         <div class="alert alert-success alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <i class="icon fa fa-ban"></i> {{session('success')}}
+                            <i class="icon fa fa-ban"></i> <p class="success">{{session('success')}}</p>
                         </div>
                         @endif
                         @if(session('failure'))

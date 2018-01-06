@@ -609,7 +609,7 @@ h2.header-sp{
 .welcome-sorts-ref >ul >li >a{
     text-transform: uppercase;
     font-family: 'Archivo Narrow',sans-serif;
-    color: #464646;
+    color: #000;
     text-decoration: none;
     font-size: 14px;
 }
