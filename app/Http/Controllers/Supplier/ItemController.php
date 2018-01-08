@@ -27,6 +27,9 @@ class ItemController extends Controller {
         $categories = hierarchicalData($categories, 'flatten');
         $brands = Brand::all();
         $items = Item::all();
+        if(Auth::guard('supplier')->user()->items()->count()>= Auth::guard('supplier')->user()->items){
+            return redirect()->back()->with('failure','you exceeded your products limit');
+        }
         return view('Supplier.Items_create', ['categories' => $categories,
             'brands' => $brands,
             'items' => $items,
