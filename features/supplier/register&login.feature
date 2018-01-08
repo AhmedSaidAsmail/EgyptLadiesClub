@@ -10,20 +10,20 @@ Feature:
      Then I should see "SupplierC-Panel" in first heading
 @makeRegisteration
     Scenario:
-    Given I am in the Regitser section
-    When I fill Register Form Fileds:
-            |f_name        |TsetFirstName            |
-            |l_name        |TestLastName             |
-            |email         |supplier@supplier.com    |
-            |mobile        |00201009340001           |
-            |company       |testCompany              |
-            |store_name    |testStroeName            |
-            |address       |testAddress              |
-            |city          |testCity                 |
-            |postal_code   |testPostalCode           |
+    Given I am in the Register section
+    When I fill Register Form fields:
+            |f_name        |TsetFirstName                |
+            |l_name        |TestLastName                 |
+            |email         |info.matrixcode@gmail.com    |
+            |mobile        |00201009340001               |
+            |company       |testCompany                  |
+            |store_name    |testStroeName                |
+            |address       |testAddress                  |
+            |city          |testCity                     |
+            |postal_code   |testPostalCode               |
     And I check option "agree"
     And I click "Submit Form" button
-    Then I should see "The email has already been taken." in alert div
+    Then I should see success div appearing
 @loginSupplier
     Scenario:
     Given I am in login arae

@@ -18,15 +18,7 @@ class CreateSuppliersTable extends Migration
             $table->string('email')->unique();
             $table->string('password')->nullable();
             $table->boolean('confirm')->nullable()->default(0);
-            // addtional information
-            $table->string('f_name');
-            $table->string('l_name');
-            $table->string('mobile');
-            $table->string('company');
-            $table->string('store_name');
-            $table->string('address');
-            $table->string('city');
-            $table->string('postal_code')->nullable();
+            $table->integer('items')->default(0);
             $table->text('rand_code');
             $table->rememberToken();
             $table->timestamps();

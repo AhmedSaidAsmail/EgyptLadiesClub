@@ -30,7 +30,18 @@ class HierarchicalDataFactory {
 
     private function setReturnCollection() {
         $this->returnCollection = $this->parseTree();
+        $this->elementsWithoutItsParent();
         return $this;
+    }
+
+    private function elementsWithoutItsParent() {
+        while (!$this->checkTempArray())
+        {
+            foreach ($this->tempCollection as  $category) {
+                
+                $this->returnCollection[] = $this->parseTree($category->parent_id)[0];
+            }
+        }
     }
 
     private function parseTree($root = null) {
@@ -49,13 +60,23 @@ class HierarchicalDataFactory {
         return empty($return) ? null : $return;
     }
 
+    private function checkTempArray() {
+        return empty($this->tempCollection) ? true : false;
+    }
+
+    private function filterReturnedArray() {
+        return array_filter($this->returnCollection, function ($var) {
+            return !is_null($var);
+        });
+    }
+
     public function returned($type = null) {
         switch ($type)
         {
             case 'flatten':
-                return new Flatten($this->returnCollection);
+                return new Flatten($this->filterReturnedArray());
             case 'printed':
-                return new PrintedData($this->returnCollection);
+                return new PrintedData($this->filterReturnedArray());
         }
     }
 

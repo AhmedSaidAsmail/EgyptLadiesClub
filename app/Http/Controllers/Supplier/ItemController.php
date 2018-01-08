@@ -23,7 +23,7 @@ class ItemController extends Controller {
     }
 
     public function create() {
-        $categories = Category::all();
+        $categories = Auth::guard('supplier')->user()->categories()->get();
         $categories = hierarchicalData($categories, 'flatten');
         $brands = Brand::all();
         $items = Item::all();
@@ -79,7 +79,7 @@ class ItemController extends Controller {
         $item = Item::find($id);
         $discountData = collectData(['request' => $request, 'table' => 'discounts', 'primaryKey' => 'discount_id']);
         $imagesData = collectData(['request' => $request, 'table' => 'items_images', 'path' => $this->_path, 'primaryKey' => 'image_id']);
-        $detailsData= collectData(['request' => $request,'table' => 'items_details'],'flatten');
+        $detailsData = collectData(['request' => $request, 'table' => 'items_details'], 'flatten');
         $item->update($data);
         $item->details()->update($detailsData);
         $item->filters()->sync($data['filters_item_id']);

@@ -78,6 +78,7 @@ class SupplierContext extends RawMinkContext implements Context {
     /**
      * @Given I am in the Register section
      */
+    
     public function iAmInTheRegitserSection() {
         $this->visitPath('/register/supplier');
     }
@@ -85,6 +86,7 @@ class SupplierContext extends RawMinkContext implements Context {
     /**
      * @When I fill Register Form fields:
      */
+    
     public function iFillRegisterFormFileds(TableNode $fields) {
         foreach ($fields->getRowsHash() as $field => $value) {
             $this->getSession()->getPage()->fillField($field, $value);
@@ -104,13 +106,15 @@ class SupplierContext extends RawMinkContext implements Context {
     public function iClickButton($button) {
         $this->getSession()->getPage()->pressButton($button);
     }
-
-    /**
-     * @Then I should see :alertsString in alert div
+        /**
+     * @Then I should see success div appearing
      */
-    public function iShouldSee($alertsString) {
-        $alertDiv = $this->getSession()->getPage()->find('css', '.alert-danger >ul');
-        expect($alertDiv->getText())->toBe($alertsString);
+    public function iShouldSeeSuccessDivAppearing()
+    {
+        $successDiv = $this->getSession()->getPage()->find('css', '.alert-success');
+        if(is_null($successDiv)){
+            throw new Exception('unsuccessfully');
+        }
     }
 
     /**

@@ -28,7 +28,7 @@ class RegisterController extends Controller {
     public function register(Request $request) {
         $this->validator($request);
         $register = $this->create($request);
-        if(!$register){
+        if(!$register instanceof Supplier){
             return $register;
         }
         $this->sendConfirmationMail($request->email, $register->id, $register->rand_code);
@@ -67,8 +67,9 @@ class RegisterController extends Controller {
         $data['confirm'] = 0;
         $data['rand_code'] = md5(uniqid(rand(), TRUE));
         try {
-            Supplier::create($data);
-            return true;
+            $register=Supplier::create($data);
+            $register->informations()->create($data);
+            return $register;
         } catch (Exception $ex) {
             return redirect()->back()->with('failure', $ex->getMessage());
         }

@@ -8,15 +8,8 @@ class Supplier extends User {
         'email',
         'password',
         'confirm',
-        'f_name',
-        'l_name',
-        'mobile',
-        'company',
-        'store_name',
-        'address',
-        'city',
-        'postal_code',
         'rand_code',
+        'items'
     ];
 
     public function items() {
@@ -25,6 +18,13 @@ class Supplier extends User {
 
     public function reviews() {
         return $this->hasManyThrough(\App\Models\Review::class, \App\Models\Item::class);
+    }
+    public function informations(){
+        return $this->hasOne(Models\Supplier_information::class);
+    }
+
+    public function categories(){
+        return $this->belongsToMany(\App\Models\Category::class,'supplier_categories');
     }
 
 }

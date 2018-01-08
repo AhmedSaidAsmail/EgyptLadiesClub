@@ -26,6 +26,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:web'], function() {
     Route::resource('brands', 'Admin\BrandsController', ['except' => ['destroy', 'show']]);
     Route::delete('brands/destroy', ['uses' => 'Admin\BrandsController@destroySelected'])->name('brand.destroy.selected');
     Route::resource('/suppliers', 'Admin\SuppliersController', ['except' => ['destroy', 'create', 'store', 'edit']]);
+    Route::get('/suppliers/{id}/confirm', 'Admin\SuppliersController@confirm')->name('admin.supplier.confirm');
 });
 // Suupliers 
 Route::group(['prefix' => 'supplier', 'middleware' => 'auth:supplier'], function() {

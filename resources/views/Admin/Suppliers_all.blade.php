@@ -34,7 +34,6 @@
                                     <th>Name</th>
                                     <th>Company</th>
                                     <th>City</th>
-                                    <th>Country</th>
                                     <th>Status</th>
                                     <th>Products</th>
                                     <th>#Action</th>
@@ -45,28 +44,19 @@
                                 @foreach($suppliers as $supplier)
                                 <tr>
                                     <td>{{$supplier->email}}</td>
-                                    <td>{{$supplier->f_name}} {{$supplier->l_name}}</td>
-                                    <td>{{$supplier->f_name}}</td>
-                                    <td>{{$supplier->city}}</td>
-                                    <td>{{$supplier->country}}</td>
+                                    <td>{{$supplier->informations->f_name}} {{$supplier->informations->l_name}}</td>
+                                    <td>{{$supplier->informations->company}}</td>
+                                    <td>{{$supplier->informations->city}}</td>
                                     <td> {!! ($supplier->confirm)? '<i class="fa fa-circle text-green"></i>':'<i class="fa fa-circle text-gray"></i>' !!} </td>
-                                    <td>{{count($supplier->items)}}</td>
+                                    <td>{{$supplier->items()->count()}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-default">Action</button>
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button>
                                             <div class="dropdown-menu list-group" >
                                                 <a href="{{route('suppliers.show',['id'=>$supplier->id])}}" class="list-group-item">Preview</a>
-                                                <form method="post" action="{{route('suppliers.update',['id'=>$supplier->id])}}" id="confirm{{$supplier->id}}">
-                                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                                    <input type="hidden" name="_method" value="PUT">
-                                                    @if(!$supplier->confirm)
-                                                    <a href="#" class="list-group-item confirm-supplier" data-form="confirm{{$supplier->id}}">Confirm</a>
-                                                    @else
-                                                    <input type="hidden" name="cancel_confirm" data-form="confirm{{$supplier->id}}">
-                                                    <a href="#" class="list-group-item confirm-supplier" data-form="confirm{{$supplier->id}}">Unconfirmed</a>
-                                                    @endif
-                                                </form>
+                                                <?php $confirmed = (!$supplier->confirm) ? "Confirm" : "Unconfirmed"; ?>
+                                                <a href="{{route('admin.supplier.confirm',['id'=>$supplier->id])}}" class="list-group-item">{{$confirmed}}</a>
                                             </div>
                                         </div>
 
@@ -81,7 +71,6 @@
                                     <th>Name</th>
                                     <th>Company</th>
                                     <th>City</th>
-                                    <th>Country</th>
                                     <th>Status</th>
                                     <th>Products</th>
                                     <th>#Action</th>
@@ -109,12 +98,5 @@ $(function () {
     $("#example1").DataTable();
 });
 </script>
-<script>
-    $("a.confirm-supplier").click(function (event) {
-        event.preventDefault();
-        var formValue = $(this).attr('data-form');
-        var it_form = $("form#" + formValue);
-        it_form.submit();
-    });
-</script>
+
 @endsection

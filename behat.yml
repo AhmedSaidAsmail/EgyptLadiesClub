@@ -6,7 +6,7 @@ default:
         supplier_features:
             paths: [%paths.base%/features/supplier]
             contexts: [SupplierContext]
-        admin_feature:
+        admin_features:
             paths: [%paths.base%/features/admin]
             contexts: [AdminLogin,AdminFilters,AdminContext]
     extensions:
